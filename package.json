@@ -1,0 +1,82 @@
+{
+   "name": "Blacknet",
+   "version": "0.2.1",
+   "main": "main.js",
+   "description": "Blacknet is extensible proof-of-stake network.",
+   "author": {
+      "name": "blacknet1fcemzzxna",
+      "email": "blacknet1fcemzzxna@gmail.com",
+      "url": "https://gitlab.com/blacknet1fcemzzxna"
+   },
+   "devDependencies": {
+      "electron": "^5.0.1"
+   },
+   "scripts": {
+      "start": "electron .",
+      "pack": "electron-builder --dir",
+      "dist": "electron-builder -mwl --dir"
+   },
+   "dependencies": {
+      "minimal-request-promise": "^1.5.0",
+      "tree-kill": "^1.2.1"
+   },
+   "build": {
+      "appId": "Blacknet",
+      "mac": {
+         "category": "public.app-category.Wallets"
+      },
+      "linux": {
+         "category": "public.app-category.Wallets"
+      },
+      "dmg": {
+         "iconSize": 128,
+         "contents": [
+            {
+               "x": 115,
+               "y": 164
+            },
+            {
+               "x": 387,
+               "y": 164,
+               "type": "link",
+               "path": "/Applications"
+            }
+         ],
+         "window": {
+            "x": 200,
+            "y": 200,
+            "width": 500,
+            "height": 300
+         }
+      },
+      "files": [
+         {
+            "from": ".",
+            "to": "./",
+            "filter": [
+               "!blacknet/*",
+               "!dist/*"
+            ]
+         }
+      ],
+      "win": {
+         "target": [
+            {
+               "target": "nsis",
+               "arch": [
+                  "x64",
+                  "ia32"
+               ]
+            }
+         ]
+      },
+      "nsis": {
+         "perMachine": false,
+         "oneClick": false,
+         "createDesktopShortcut": "always",
+         "differentialPackage": false
+      },
+      "asar": false,
+      "icon": "./logo.png"
+   }
+}
