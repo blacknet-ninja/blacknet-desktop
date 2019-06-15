@@ -19,7 +19,7 @@ let appUrl = 'http://127.0.0.1:8283/static/index.html';
 const openWindow = function () {
     mainWindow = new BrowserWindow({
         title: 'Blacknet',
-        width: 1280,
+        width: 1340,
         height: 800,
         backgroundColor: "#2D2D2D"
     });
