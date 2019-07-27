@@ -1,5 +1,6 @@
 
-git submodule foreach git pull origin master
+git submodule init
+git submodule update
 
 rm -rf blacknet-dist
 
@@ -18,7 +19,7 @@ cd build/distributions
 rm -rf blacknet-$version
 unzip blacknet-$version.zip
 
-mv blacknet-$version $currentpath/blacknet-dist
+# mv blacknet-$version $currentpath/blacknet-dist
 cd $currentpath
 echo $version > version
 node version.js

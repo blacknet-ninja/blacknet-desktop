@@ -1,6 +1,7 @@
 
+const version = require('fs').readFileSync('version').toString();
 const { app, BrowserWindow, dialog } = require('electron');
-const cwd = app.getAppPath() + '/blacknet-dist/bin';
+const cwd = app.getAppPath() + '/blacknet-'+version+'/bin';
 const platform = process.platform;
 
 app.on('window-all-closed', () => {
@@ -66,7 +67,7 @@ const startUp = function () {
 function checkJava(callback) {
   
     let command = 'java -version';
-    let spawnPath = app.getAppPath() + '/blacknet-dist/bin/blacknet';
+    let spawnPath = app.getAppPath() + '/blacknet-'+version+'/bin/blacknet';
     
     if (platform === 'win32' || platform == 'win64') {
         spawnPath = spawnPath + '.bat';
