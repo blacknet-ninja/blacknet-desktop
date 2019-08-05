@@ -1,8 +1,20 @@
 
-const version = require('fs').readFileSync('version').toString();
-const { app, BrowserWindow, dialog } = require('electron');
-const cwd = app.getAppPath() + '/blacknet-'+version+'/bin';
+const { app, ipcMain, BrowserWindow, dialog } = require('electron');
 const platform = process.platform;
+const requestPromise = require('minimal-request-promise');
+const checkJava = require('./lib/start');
+const checkUpdates = require('./lib/update');
+
+const events = require('events');
+// 创建 eventEmitter 对象
+let mainWindow;
+let serverProcess;
+let isStartDamon = false;
+
+
+let appUrl = 'http://127.0.0.1:8283/static/index.html';
+
+
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
@@ -11,28 +23,112 @@ app.on('window-all-closed', () => {
 });
 
 app.on('ready', () => {
-    checkJava(startUp);
+    if(isStartDamon){
+        return openWindow(appUrl);
+    }
+    openWindow();
+    checkJava(app, startUp);
 });
 
 
-let appUrl = 'http://127.0.0.1:8283/static/index.html';
 
-const openWindow = function () {
+function startUp() {
+
+    // check updateinfo
+
+    ipcMain.on('start_proccess', (event, arg) => {
+        event.reply('sync-status-reply', 'pong')
+
+        checkUpdates(event, function (ret) {
+
+            startBlacknetMainProcess();
+
+        });
+    });
+
+    ipcMain.on('update_end', (event, arg) => {
+
+        startBlacknetMainProcess();
+
+    });
+
+};
+
+
+
+function startBlacknetMainProcess() {
+
+
+    const version = require('fs').readFileSync(__dirname + '/version').toString();
+    const cwd = __dirname + '/blacknet-' + version + '/bin';
+
+    let spawnPath = __dirname + '/blacknet-' + version + '/bin/blacknet';
+
+    if (platform === 'win32' || platform == 'win64') {
+        spawnPath = spawnPath + '.bat';
+    }
+    serverProcess = require('child_process').spawn(spawnPath, { cwd });
+
+    serverProcess.stdout.on('data', (data) => {
+        // console.log(`stdout: ${data}`);
+    });
+
+    serverProcess.stderr.on('data', (data) => {
+        // console.log(`stderr: ${data}`);
+    });
+
+    serverProcess.on('close', (code) => {
+        console.log(`child process exited with code ${code}`);
+    });
+
+    reloadWindow();
+
+}
+// 在主进程中.
+
+function reloadWindow(){
+
+    requestPromise.get(appUrl).then(function (response) {
+        console.log('Server started!');
+        mainWindow.loadURL(appUrl);
+
+    }, function (response) {
+        console.log('Waiting for the server start...');
+
+        setTimeout(function () {
+            reloadWindow();
+        }, 1000);
+    });
+}
+
+
+
+
+function openWindow(url) {
+
     mainWindow = new BrowserWindow({
         title: 'Blacknet',
         width: 1340,
         height: 800,
-        backgroundColor: "#2D2D2D"
+        backgroundColor: "#2D2D2D",
+        webPreferences: {
+            nodeIntegration: true
+        }
     });
 
-    mainWindow.loadURL(appUrl);
-
+    if(url){
+        mainWindow.loadURL(appUrl);
+    }else{
+        mainWindow.loadFile('./static/index.html');
+    }
+    
     mainWindow.on('closed', function () {
         mainWindow = null;
     });
+    // mainWindow.webContents.openDevTools()
 
     mainWindow.on('close', function (e) {
-        if (serverProcess) {
+        if (serverProcess && serverProcess.pid) {
             e.preventDefault();
             // kill Java executable
             const kill = require('tree-kill');
@@ -47,43 +143,5 @@ const openWindow = function () {
         }
     });
     mainWindow.setMenu(null);
+    return mainWindow;
 };
-
-const startUp = function () {
-    const requestPromise = require('minimal-request-promise');
-
-    requestPromise.get(appUrl).then(function (response) {
-        console.log('Server started!');
-        openWindow();
-    }, function (response) {
-        console.log('Waiting for the server start...');
-        setTimeout(function () {
-            startUp();
-        }, 200);
-    });
-};
-
-
-function checkJava(callback) {
-  
-    let command = 'java -version';
-    let spawnPath = app.getAppPath() + '/blacknet-'+version+'/bin/blacknet';
-    
-    if (platform === 'win32' || platform == 'win64') {
-        spawnPath = spawnPath + '.bat';
-        command = 'java.exe -version';
-    }
-
-    require('child_process').exec(command, function (error, stdout, stderr) {
-
-        if (error || /java|Java/.test(stderr.toString()) == false) {
-            dialog.showMessageBox({ message: "Blacknet need Java installed" });
-            app.quit();
-        } else {
-
-            serverProcess = require('child_process').spawn(spawnPath, { cwd });
-            callback();
-        }
-    });
-
-}

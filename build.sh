@@ -1,27 +1,23 @@
+# currentpath=`pwd`
+# cd blacknet
+# # ls
 
-git submodule init
-git submodule update
+# # cat src/main/resources/version.txt
 
-rm -rf blacknet-dist
+# ./gradlew build
 
-currentpath=`pwd`
-cd blacknet
-# ls
+# version=`cat build/resources/main/version.txt`
+# echo $version
 
-# cat src/main/resources/version.txt
+# cd build/distributions
+# rm -rf blacknet-$version
+# unzip blacknet-$version.zip
 
-./gradlew build
-
-version=`cat build/resources/main/version.txt`
-echo $version
-
-cd build/distributions
-rm -rf blacknet-$version
-unzip blacknet-$version.zip
-
-# mv blacknet-$version $currentpath/blacknet-dist
-cd $currentpath
-echo $version > version
+# # mv blacknet-$version $currentpath/blacknet-dist
+# cd $currentpath
+# echo $version > version
+rm -rf blacknet-*
+rm -rf dist
 node version.js
 
 electron-builder -mwl

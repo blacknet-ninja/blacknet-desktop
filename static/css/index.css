@@ -1,0 +1,286 @@
+/*
+ * Copyright (c) 2018-2019 Blacknet Team
+ *
+ * Licensed under the Jelurida Public License version 1.1
+ * for the Blacknet Public Blockchain Platform (the "License");
+ * you may not use this file except in compliance with the License.
+ * See the LICENSE.txt file at the top-level directory of this distribution.
+ */
+
+ * {
+    margin: 0;
+    padding: 0;
+    font-family: "Titillium Web", Arial, sans-serif;
+}
+
+:root {
+    --darker-grey-bg: #2D2D2D;
+    --lighter-grey-bg: #3B3B3B;
+    --gold-text: #E8BA3F;
+    --grey-text: #ADADAD;
+}
+
+body {
+    background: #3B3B3B;
+}
+
+.mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--darker-grey-bg);
+    opacity: 0.9;
+    z-index: 100;
+    /* display: none; */
+}
+
+.mask.init {
+    background: #2A2A2A;
+    opacity: 1;
+}
+
+.notification{
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 80;
+    border: 1px solid #575557;
+    background-color: #383638;
+    width: 400px;
+    font-size: 12px;
+    border-radius: 5px;
+    padding: 10px;
+    display: none;
+}
+.notification p{
+    color: #FFFFFF;
+    line-height: 1.6;
+}
+
+.dialog {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 450px;
+    height: 300px;
+    margin: -150px 0 0 -225px;
+    background: #2A2A2A;
+    z-index: 101;
+    color: #999EA3;
+    border: 1px solid #1D1D1D;
+    border-radius: 3px;
+    font-size: 12px;
+    padding: 15px 20px;
+    overflow: hidden;
+}
+
+.dialog.send {
+    display: none;
+}
+
+.dialog.send .body {
+    height: 260px;
+}
+
+.dialog .btns {
+    margin-top: 10px;
+}
+
+.dialog p {
+    font-size: 14px;
+    word-break: break-all;
+    line-height: 1.5;
+}
+
+.dialog .btns button {
+    float: right;
+}
+
+button.cancel {
+    background: transparent;
+    border: 1px solid #575757;
+    /* color: #90B2EF; */
+    color: #575757;
+    margin-right: 20px;
+}
+
+input:focus, button:focus {
+    outline: 0;
+}
+
+.dialog.password {
+    width: 500px;
+    height: 150px;
+    padding: 10px 20px;
+    margin-left: -250px;
+    margin-top: -75px;
+    display: none;
+}
+
+.dialog.password .body {
+    margin-top: 10px;
+    line-height: 1.5;
+}
+
+.dialog.password input {
+    height: 24px;
+    font-size: 12px;
+    width: 490px;
+    padding: 2px 5px;
+}
+
+.dialog.confirm .body{
+    /* text-align: center; */
+    line-height: 25px;
+    font-size: 14px;
+}
+
+.dialog.confirm .btns{
+    text-align: center;
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+}
+
+.dialog.confirm .btns button{
+    float: none;
+}
+
+.dialog.confirm{
+    width: 510px;
+    height: 240px;
+    padding: 10px 20px;
+    margin-left: -255px;
+    margin-top: -120px;
+    display: none;
+}
+
+fieldset pre {
+    width: 80%;
+    height: 55px;
+    flex-grow: 8;
+}
+.add-peer{
+    margin-top: 50px;
+    width: 768px;
+}
+.add-peer button{
+    float: right;
+}
+
+h1{
+    font-size: 30px;
+}
+.dialog.account {
+    text-align: center;
+    width: 600px;
+    height: 360px;
+    margin: -200px 0 0 -320px;
+    border: none;
+    border-radius: none;
+}
+.dialog.newaccount{
+    display: none;
+    width: 700px;
+    height: 260px;
+    margin: -130px 0 0 -350px;
+}
+
+.dialog.account h1 {
+    color: var(--gold-text);
+}
+
+.dialog.account button {
+    margin-top: 20px;
+}
+
+.spinner {
+    margin: 0 auto;
+    width: 50px;
+    height: 40px;
+    text-align: center;
+    font-size: 10px;
+    margin-top:20px;
+}
+
+.spinner>div {
+    background-color: var(--gold-text);
+    height: 100%;
+    width: 6px;
+    display: inline-block;
+    -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
+    animation: sk-stretchdelay 1.2s infinite ease-in-out;
+}
+
+.spinner .rect2 {
+    -webkit-animation-delay: -1.1s;
+    animation-delay: -1.1s;
+}
+
+.spinner .rect3 {
+    -webkit-animation-delay: -1.0s;
+    animation-delay: -1.0s;
+}
+
+.spinner .rect4 {
+    -webkit-animation-delay: -0.9s;
+    animation-delay: -0.9s;
+}
+
+.spinner .rect5 {
+    -webkit-animation-delay: -0.8s;
+    animation-delay: -0.8s;
+}
+
+@-webkit-keyframes sk-stretchdelay {
+    0%, 40%, 100% {
+        -webkit-transform: scaleY(0.4)
+    }
+    20% {
+        -webkit-transform: scaleY(1.0)
+    }
+}
+
+@keyframes sk-stretchdelay {
+    0%, 40%, 100% {
+        transform: scaleY(0.4);
+        -webkit-transform: scaleY(0.4);
+    }
+    20% {
+        transform: scaleY(1.0);
+        -webkit-transform: scaleY(1.0);
+    }
+}
+
+.tips{
+    margin-top: 20px;
+    font-size: 12px;
+}
+
+
+.progress-stats, .progress-stats-text{
+    /* position: fixed; */
+    bottom: 10px;
+    right: 10px;
+    z-index: 1000;
+    /* display: none; */
+}
+.progress-stats-text{
+    z-index: 1001;
+    color: #eee;
+    height: 20px;
+    width: 200px;
+    font-size: 12px;
+    line-height: 20px;
+    text-align: center;
+}
+.progress{
+    display: flex;
+    height: 20px;
+    overflow: hidden;
+    width: 200px;
+    background-color: var(--darker-grey-bg);
+    border-radius: 2px;
+}
