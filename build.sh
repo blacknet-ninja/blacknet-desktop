@@ -18,6 +18,5 @@
 # echo $version > version
 rm -rf blacknet-*
 rm -rf dist
-node version.js
 
 electron-builder -mwl

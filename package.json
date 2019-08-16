@@ -1,7 +1,7 @@
 {
    "name": "Blacknet",
-   "version": "0.2.3",
    "main": "main.js",
+   "version": "0.2.4",
    "description": "Blacknet is extensible proof-of-stake network.",
    "author": {
       "name": "blacknet1fcemzzxna",

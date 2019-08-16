@@ -38,6 +38,6 @@ ipc.on('dontneedupdate', function (event, data) {
 
 ipc.send('start_proccess');
 
-timerid = setTimeout(function(){
+timerid = setInterval(function(){
     ipc.send('start_proccess');
 },1000);
