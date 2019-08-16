@@ -29,9 +29,6 @@
       "mac": {
          "category": "public.app-category.Wallets"
       },
-      "linux": {
-         "category": "public.app-category.Wallets"
-      },
       "dmg": {
          "iconSize": 128,
          "contents": [
@@ -52,6 +49,11 @@
             "width": 500,
             "height": 300
          }
+      },
+      "linux": {
+         "target": "deb",
+         "executableName": "Blacknet-desktop",
+         "category": "public.app-category.Wallets"
       },
       "files": [
          {
