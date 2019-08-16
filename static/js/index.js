@@ -2,7 +2,6 @@
 window.$ = window.jQuery = require('./js/jquery-3.4.1.min.js');
 
 const ipc = require('electron').ipcRenderer
-const BrowserWindow = require('electron').remote.BrowserWindow
 
 ipc.on('try', function (event, data) {
     $('.tips').html('New version available: ' + data.version );
@@ -10,6 +9,10 @@ ipc.on('try', function (event, data) {
 
 ipc.on('start', function (event, data) {
     $('.tips').html('Start download: ' + data.version);
+})
+
+ipc.on('ready', function (event, data) {
+    clearTimeout(timerid);
 })
 
 ipc.on('data', function (event, data) {
@@ -34,3 +37,7 @@ ipc.on('dontneedupdate', function (event, data) {
 
 
 ipc.send('start_proccess');
+
+timerid = setTimeout(function(){
+    ipc.send('start_proccess');
+},1000);
