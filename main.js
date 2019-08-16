@@ -37,7 +37,7 @@ function startUp() {
     // check updateinfo
 
     ipcMain.on('start_proccess', (event, arg) => {
-        event.reply('sync-status-reply', 'pong')
+        event.reply('ready', '');
 
         checkUpdates(event, function (ret) {
 
@@ -51,6 +51,7 @@ function startUp() {
         startBlacknetMainProcess();
 
     });
+
 
 };
 
