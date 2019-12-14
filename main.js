@@ -1,7 +1,7 @@
 
 const { app, ipcMain, BrowserWindow, dialog } = require('electron');
 const platform = process.platform;
-const requestPromise = require('minimal-request-promise');
+const request = require('request');
 const checkJava = require('./lib/start');
 const checkUpdates = require('./lib/update');
 
@@ -11,6 +11,7 @@ let mainWindow;
 let serverProcess;
 let isStartDamon = false;
 
+const localVersion = require('fs').readFileSync(__dirname + '/version').toString();
 
 let appUrl = 'http://127.0.0.1:8283/static/index.html';
 
@@ -39,7 +40,7 @@ function startUp() {
     ipcMain.on('start_proccess', (event, arg) => {
         event.reply('ready', '');
 
-        checkUpdates(event, function (ret) {
+        checkUpdates(event, localVersion, function (ret) {
 
             startBlacknetMainProcess();
 
@@ -59,8 +60,8 @@ function startUp() {
 
 function startBlacknetMainProcess() {
 
-
     const version = require('fs').readFileSync(__dirname + '/version').toString();
+
     const cwd = __dirname + '/blacknet-' + version + '/bin';
 
     let spawnPath = __dirname + '/blacknet-' + version + '/bin/blacknet';
@@ -68,6 +69,7 @@ function startBlacknetMainProcess() {
     if (platform === 'win32' || platform == 'win64') {
         spawnPath = spawnPath + '.bat';
     }
+    console.log(spawnPath)
     serverProcess = require('child_process').spawn(spawnPath, { cwd });
 
     serverProcess.stdout.on('data', (data) => {
@@ -75,7 +77,7 @@ function startBlacknetMainProcess() {
     });
 
     serverProcess.stderr.on('data', (data) => {
-        // console.log(`stderr: ${data}`);
+        console.log(`stderr: ${data}`);
     });
 
     serverProcess.on('close', (code) => {
@@ -89,16 +91,19 @@ function startBlacknetMainProcess() {
 
 function reloadWindow(){
 
-    requestPromise.get(appUrl).then(function (response) {
-        console.log('Server started!');
-        mainWindow.loadURL(appUrl);
+    request.get(appUrl, function (err, response, body) {
+        
+        if(err){
+            console.log('Waiting for the server start...');
 
-    }, function (response) {
-        console.log('Waiting for the server start...');
+            setTimeout(function () {
+                reloadWindow();
+            }, 1000);
+        }else{
+            console.log('Server started!');
 
-        setTimeout(function () {
-            reloadWindow();
-        }, 1000);
+            mainWindow.loadURL(appUrl);
+        }
     });
 }
 

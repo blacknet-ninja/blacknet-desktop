@@ -3,6 +3,7 @@
    "main": "main.js",
    "version": "0.2.4",
    "description": "Blacknet is extensible proof-of-stake network.",
+   "homepage": "https://gitlab.com/blacknet-ninja/blacknet-desktop",
    "author": {
       "name": "blacknet1fcemzzxna",
       "email": "blacknet1fcemzzxna@gmail.com",
@@ -20,7 +21,7 @@
       "cheerio": "^1.0.0-rc.3",
       "extract-zip": "^1.6.7",
       "fstream": "^1.0.12",
-      "minimal-request-promise": "^1.5.0",
+      "request": "^2.88.0",
       "tree-kill": "^1.2.1",
       "unzip": "^0.1.11"
    },
