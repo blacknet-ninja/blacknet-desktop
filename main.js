@@ -24,11 +24,11 @@ app.on('window-all-closed', () => {
 });
 
 app.on('ready', () => {
-    if(isStartDamon){
-        return openWindow(appUrl);
-    }
+    // if(isStartDamon){
+    //     return openWindow(appUrl);
+    // }
     openWindow();
-    checkJava(app, startUp);
+    // checkJava(app, startUp);
 });
 
 
@@ -122,16 +122,16 @@ function openWindow(url) {
         }
     });
 
-    if(url){
-        mainWindow.loadURL(appUrl);
-    }else{
+    // if(url){
+    //     mainWindow.loadURL(appUrl);
+    // }else{
         mainWindow.loadFile('./static/index.html');
-    }
+    // }
     
     mainWindow.on('closed', function () {
         mainWindow = null;
     });
-    // mainWindow.webContents.openDevTools()
+    mainWindow.webContents.openDevTools()
 
     mainWindow.on('close', function (e) {
         if (serverProcess && serverProcess.pid) {
