@@ -35,9 +35,9 @@ void function () {
         Blacknet.explorer = JSON.parse(localStorage.explorer);
     }
 
-    Blacknet.init = async function () {
+    Blacknet.init = async function (nowait) {
 
-        await Blacknet.wait(1000);
+        if(!nowait) await Blacknet.wait(1000);
 
         if (mnemonic) {
 
@@ -62,7 +62,7 @@ void function () {
                 currentAccount = blacknetjs.Address(mnemonic);
 
                 if (Blacknet.verifyMnemonic(mnemonic) && currentAccount) {
-                    
+                    Blacknet.init(true);
                 } else {
 
                     Blacknet.message("Invalid mnemonic", "warning")
