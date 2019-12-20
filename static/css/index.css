@@ -121,8 +121,8 @@ header .network {
     color: var(--gold-text);
 }
 
-.menu .cancel_lease_tab{
-    /* display: none; */
+.no_out_leases_msg{
+    display: none;
 }
 
 .rightpanel {

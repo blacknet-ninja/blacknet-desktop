@@ -1,8 +1,8 @@
 {
-   "name": "Blacknet",
+   "name": "blacknet-desktop",
    "main": "main.js",
-   "version": "0.2.4",
-   "description": "Blacknet is extensible proof-of-stake network.",
+   "version": "1.0.0",
+   "description": "Blacknet-desktop is fast, because it uses servers that index the Blacknet blockchain.",
    "homepage": "https://gitlab.com/blacknet-ninja/blacknet-desktop",
    "author": {
       "name": "blacknet1fcemzzxna",
@@ -10,21 +10,14 @@
       "url": "https://gitlab.com/blacknet1fcemzzxna"
    },
    "devDependencies": {
-      "electron": "^5.0.1"
+      "electron": "^7.1.7"
    },
    "scripts": {
       "start": "electron .",
       "pack": "electron-builder --dir",
       "dist": "electron-builder -mwl --dir"
    },
-   "dependencies": {
-      "cheerio": "^1.0.0-rc.3",
-      "extract-zip": "^1.6.7",
-      "fstream": "^1.0.12",
-      "request": "^2.88.0",
-      "tree-kill": "^1.2.1",
-      "unzip": "^0.1.11"
-   },
+   "dependencies": {},
    "build": {
       "appId": "Blacknet",
       "mac": {

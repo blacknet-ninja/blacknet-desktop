@@ -12,7 +12,7 @@ void function () {
     const Blacknet = {};
     const DEFAULT_CONFIRMATIONS = 10;
     const GENESIS_TIME = 1545555600;
-    const blockListEl = $('#block-list'), apiVersion = "https://blnmobiledaemon.blnscan.io/api/v2", body = $("body");;
+    const apiVersion = "https://blnmobiledaemon.blnscan.io/api/v2", body = $("body");;
     const progressStats = $('.progress-stats, .progress-stats-text');
     const dialogPassword = $('.dialog.password'), dialogConfirm = $('.dialog.confirm'), mask = $('.mask');
     
@@ -63,7 +63,6 @@ void function () {
 
                 if (Blacknet.verifyMnemonic(mnemonic) && currentAccount) {
                     
-                    Blacknet.init();
                 } else {
 
                     Blacknet.message("Invalid mnemonic", "warning")
@@ -73,6 +72,19 @@ void function () {
             });
         }
     };
+    Blacknet.generate =  function() {
+        
+        $('.account.dialog').hide();
+        $('.newaccount.dialog').show();
+
+        mnemonic = blacknetjs.Mnemonic();
+        currentAccount = blacknetjs.Address(mnemonic);
+
+        $('#new_account_text').val(currentAccount);
+        $('#new_mnemonic').val(mnemonic);
+        window.isGenerated = true;
+    }
+
 
     Blacknet.balance = async function () {
 
@@ -88,9 +100,9 @@ void function () {
             confirmedBalance.html(Blacknet.toBLNString(data.confirmedBalance));
             stakingBalance.html(Blacknet.toBLNString(data.stakingBalance));
 
-            inLeasesBalance.html(Blacknet.toBLNString(data.inLeasesBalance));
-            outLeasesBalance.html(Blacknet.toBLNString(data.outLeasesBalance));
-            realBalance.html(Blacknet.toBLNString(data.realBalance));
+            inLeasesBalance.html(Blacknet.toBLNString(data.inLeasesBalance || 0));
+            outLeasesBalance.html(Blacknet.toBLNString(data.outLeasesBalance || 0));
+            realBalance.html(Blacknet.toBLNString(data.realBalance || 0));
 
         }).fail(function () {
             balance.html('0.00000000 BLN');
@@ -241,7 +253,7 @@ void function () {
             to + '\n\n0.001 BLN added as transaction fee?', function (flag) {
                 if (!flag)  return;
 
-                
+                Blacknet.template.pinMessage("Request Pending...");
                 let from = blacknetjs.Address(mnemonic);
                 
                 bln.jsonrpc.transfer(mnemonic, {
@@ -252,7 +264,7 @@ void function () {
                     to: to,
                     encrypted: encrypted
                 }).then((res)=>{
-
+                    Blacknet.template.hidePinMessage();
                     if(res.body.length == 64){
                         $('#transfer_result').text(res.body).parent().removeClass("hidden");
                     }else{
@@ -289,8 +301,9 @@ void function () {
                 
                 if(type == 'cancelLease') data.height = height;
                 
+                Blacknet.template.pinMessage("Request Pending...");
                 bln.jsonrpc[type](mnemonic, data).then((res)=>{
-
+                    Blacknet.template.hidePinMessage();
                     if(res.body.length == 64 && type == 'cancelLease' ){
                         Blacknet.message("Cancel Lease Success", "success");
                         $('#cancel_lease_result').text(res.body).parent().removeClass("hidden")
@@ -328,76 +341,23 @@ void function () {
             ('0' + day).substr(-2) + " " + hours.substr(-2) + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
     }
 
-    Blacknet.addBlock = async function (hash, height) {
-
-        let url = `/block/${hash}`;
-        let block = await Blacknet.getPromise(url, 'json');
-
-        Blacknet.template.block(blockListEl, block, height, false);
-
-        return block.previous
-    }
-
-    Blacknet.initRecentBlocks = async function () {
-
-        let blocks = await Blacknet.getPromise(explorerApi + '/recent_blocks');
-        
-        for(let block of blocks){
-            await Blacknet.template.block(blockListEl, block, block.height, false);
-        }
-        // let i = 0;
-        // let hash = Blacknet.ledger.blockHash;
-        // let height = Blacknet.ledger.height;
-
-        // if (height < 36) return;
-
-        // while (i++ < 35) {
-        //     hash = await Blacknet.addBlock(hash, height);
-        //     height--;
-        // }
-    }
-
-    Blacknet.serializeTx = function (transactions) {
-        let txs = [];
-
-        for (hash in transactions) {
-            let tx = transactions[hash];
-            tx.hash = hash;
-            txs.push(tx);
-        }
-
-        txs.sort(function (x, y) {
-            return y.height - x.height;
-        });
-
-        return txs;
-    }
-
     Blacknet.initRecentTransactions = async function () {
-        let transactions = await Blacknet.getPromise(explorerApi + '/account/txns/' + currentAccount, 'json');
-        await Blacknet.renderTxs(transactions);
+        // let transactions = await Blacknet.getPromise(explorerApi + '/account/txns/' + currentAccount, 'json');
+        await Blacknet.renderTxs();
     };
 
     Blacknet.renderTxs = async function (arr, type) {
-        type = type || '';
-        txList.html('');
 
-        let txArray = await Blacknet.getPromise(explorerApi + '/account/txns/' + currentAccount + '?type=' + type, 'json');
         let defaultTxAmount = 100, txProgress = $('.tx-progress'),
             showMore = $('.tx-foot .show_more_txs'),
             noTxYet = $('.tx-foot .no_tx_yet');
+        type = type || '';
+        txList.find('.preview').remove();
+        txList.find('.loading-spinner').show();
+        noTxYet.hide();
+        let txArray = await Blacknet.getPromise(explorerApi + '/account/txns/' + currentAccount + '?type=' + type, 'json');
 
-
-        let renderArray = txArray;
-
-        
-        if ('genesis' == type) {
-            renderArray = txArray.filter(function (tx) {
-                return tx.time == GENESIS_TIME;
-            });
-        }
-
-        if (renderArray.length == 0) {
+        if (txArray.length == 0) {
             noTxYet.show();
             showMore.hide();
         } else {
@@ -406,27 +366,16 @@ void function () {
 
         txProgress.hide();
         
-        Blacknet.currentTxIndex = renderArray;
+        txList.find('.loading-spinner').hide();
+        for (let tx of txArray) {
 
-        for (let tx of renderArray) {
-
-            if (defaultTxAmount-- < 1) {
-                break;
-            }
-            await Blacknet.processTransaction(tx);
+            await Blacknet.renderTransaction(tx);
         }
 
-        if (defaultTxAmount < 0) {
-            showMore.show();
-        } else {
-            showMore.hide();
-        }
+        defaultTxAmount < 0 ? showMore.show() : showMore.hide();
 
     };
 
-    Blacknet.processTransaction = async function (tx) {
-        await Blacknet.renderTransaction(tx);
-    };
 
     Blacknet.showMoreTxs = async function () {
 
@@ -438,7 +387,7 @@ void function () {
         for (let tx of transactions) {
 
             if (Blacknet.stopMore == false) {
-                await Blacknet.processTransaction(tx);
+                await Blacknet.renderTransaction(tx);
             }
         }
     };
@@ -458,21 +407,27 @@ void function () {
             return;
         }
 
-        node = await Blacknet.template.transaction(tx, account);
+        node = await Blacknet.template.transaction(tx, currentAccount);
         prepend ? node.prependTo(txList) : node.appendTo(txList);
 
     };
 
     Blacknet.renderLease = async function () {
 
+        let nomore = $('#leases-list').find('.no_out_leases_msg'), loading = $('#leases-list').find('.loading-spinner');
+        loading.show();
+        nomore.hide();
+        $('#leases-list').find('.leases').remove();
+
         let outLeases = await Blacknet.getPromise(explorerApi + '/outleases/' + currentAccount);
-        $('.cancel_lease_tab').show();
+        
 
+        loading.hide();
         if (outLeases.length > 0) {
-
-            $('#leases-list').html('');
             outLeases.map(Blacknet.template.lease);
 
+        }else{
+            nomore.show();
         }
     };
 
@@ -491,7 +446,7 @@ void function () {
         return statusText;
     };
 
-    Blacknet.getTxTypeName = function (type) {
+    Blacknet.getTxTypeName = function (tx, type) {
         let typeNames = [
             "Transfer",
             "Burn",
@@ -529,31 +484,6 @@ void function () {
         return new BigNumber(balance).dividedBy(1e8).toFixed(8) + ' BLN';
     };
 
-    Blacknet.newTransactionNotify = function (tx) {
-
-        let notification = notificationNode.clone();
-        let time = Blacknet.unix_to_local_time(tx.time);
-
-        //TODO MultiData
-        let dataType = tx.data[0].type;
-        let txData = tx.data[0].data;
-
-        let type = Blacknet.getTxTypeName(dataType), amount = Blacknet.getFormatBalance(txData.amount);;
-
-        if (type == 'Generated') {
-            amount = Blacknet.getFormatBalance(tx.fee);
-        }
-
-        notification.find('.time').text(time);
-        notification.find('.type').text(type);
-        notification.find('.amount').text(amount);
-
-        // notification.appendTo('body').show();
-
-        // notification.delay(2000).animate({ top: "-100px", opacity: 0 }, 1000, function () {
-        //     notification.remove();
-        // });
-    };
     Blacknet.renderTxStatus = async function (index, el) {
 
         let statusText, node = $(el).find('.status');
@@ -570,11 +500,6 @@ void function () {
 
         $.each($('#tx-list tr'), Blacknet.renderTxStatus);
     };
-
-    Blacknet.renderBlock = async function (block, height, prepend = true) {
-
-        Blacknet.template.block(blockListEl, block, height, prepend);
-    }
 
     Blacknet.throttle = function (fn, threshhold = 250) {
 
@@ -619,7 +544,6 @@ void function () {
 
         await Blacknet.balance();
         await Blacknet.network();
-        await Blacknet.initRecentBlocks();
 
         if (currentAccount) {
             await Blacknet.initRecentTransactions();
@@ -730,11 +654,11 @@ void function () {
         });
     }
 
-    Blacknet.message = function (msg, type) {
+    Blacknet.message = function (msg, type, duration) {
         if (window.i18nData && window.i18nData[msg.toLocaleLowerCase()]) {
             msg = window.i18nData[msg.toLocaleLowerCase()]
         }
-        Blacknet.template.message(msg, type)
+        Blacknet.template.message(msg, type, duration)
     }
 
     window.addEventListener('beforeunload', function (e) {

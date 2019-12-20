@@ -86,6 +86,8 @@ $(document).ready(function () {
         panel.find('.' + index).show().siblings().hide();
 
         localStorage.hashIndex = index;
+
+        if(index == 'cancel_lease') Blacknet.renderLease();
         return false;
     }
 
@@ -224,18 +226,7 @@ $(document).ready(function () {
         location.reload();
     }
 
-    async function newAccount() {
-        $('.account.dialog').hide();
-        $('.newaccount.dialog').show();
 
-        let mnemonic = blacknetjs.Mnemonic();
-        let address = blacknetjs.Address(mnemonic);
-
-        $('#new_account_text').val(address);
-        $('#new_mnemonic').val(mnemonic);
-        localStorage.account = address;
-        window.isGenerated = true;
-    }
 
     function newAccountNext() {
 
@@ -245,7 +236,9 @@ $(document).ready(function () {
 
             $('#confirm_mnemonic_warning_container label').css('color', 'red');
         } else {
-            location.reload();
+            $('.account-input').hide();
+            $('.newaccount.dialog,.mask').hide();
+            Blacknet.init();
         }
         return false;
     }
@@ -357,7 +350,7 @@ $(document).ready(function () {
         .on("click", "#verify", verify)
         .on("click", "#add_peer_btn", addPeer)
         .on("click", "#switch_account", switchAccount)
-        .on("click", "#new_account", newAccount)
+        .on("click", "#new_account", Blacknet.generate)
         .on("input", "#confirm_mnemonic_warning", confirm_mnemonic_warning)
         .on("click", "#new_account_next_step", newAccountNext)
         .on("click", "#peer-table .disconnect", disconnect)

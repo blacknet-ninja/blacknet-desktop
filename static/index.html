@@ -47,7 +47,7 @@
                     <li>
                         <a href="#" data-index="lease" data-i18n="lease">Lease</a>
                     </li>
-                    <li class="cancel_lease_tab">
+                    <li>
                         <a href="#" data-index="cancel_lease" data-i18n="cancel lease">Cancel Lease</a>
                     </li>
                     <li>
@@ -57,10 +57,7 @@
                         <a href="#" data-index="sign" data-i18n="sign/verify message">Sign/Verify Message</a>
                     </li>
                     <li>
-                        <a href="#" data-index="recentblocks" data-i18n="blocks">Blocks</a>
-                    </li>
-                    <li>
-                        <a href="#" data-index="about" data-i18n="About Blacknet Lightly">About Blacknet Lightly</a>
+                        <a href="#" data-index="about" data-i18n="About Blacknet">About Blacknet </a>
                     </li>
                 </ul>
             </div>
@@ -159,7 +156,7 @@
                 <div class="transactions">
                     <h3 data-i18n="recent transactions">Recent Transactions</h3>
                     <div class="filter" ng-init="type='all'">
-                            <a href="#" data-type="all" class="active" data-i18n="All">All</a>
+                        <a href="#" data-type="all" class="active" data-i18n="All">All</a>
                         <a href="#" data-type="0" data-i18n="Transfer">Transfer</a>
                         <a href="#" data-type="2" data-i18n="Lease">Lease</a>
                         <a href="#" data-type="3" data-i18n="Cancel Lease">Cancel Lease</a>
@@ -175,7 +172,7 @@
                             </tr>
                         </thead>
                         <tbody id="tx-list">
-                            <tr>
+                            <tr class="loading-spinner">
                                 <td colspan="5">
                                     <div class="spinner">
                                         <div class="rect1"></div>
@@ -275,91 +272,9 @@
                         <p id="verify_result"></p>
                     </div>
                 </div>
-                <div class="info">
-                    <div class="form">
-                        <legend data-i18n="mnemonic info">Mnemonic Info</legend>
-                        <div class="field-row">
-                            <label data-i18n="mnemonic">Mnemonic</label>
-                            <input type="password" id="mnemonic_info_mnemonic">
-                        </div>
-
-                        <button id="mnemonic_info" data-i18n="mnemonic info">Mnemonic info</button>
-                    </div>
-                    <div class="field-row field-row-outer hidden">
-                        <label data-i18n="result">Result</label>
-                        <pre id="mnemonic_info_result"></pre>
-                    </div>
-                </div>
+                
                 <div class="generate"></div>
-                <div class="recentblocks">
-                    <h3 data-i18n="blocks">Blocks</h3>
-                    <table id="block-table">
-                        <thead>
-                            <tr>
-                                <td class="narrow" data-i18n="height">Height</td>
-                                <td class="narrow" data-i18n="size">Size</td>
-                                <td class="narrow" data-i18n="time">Time</td>
-                                <td class="narrow" data-i18n="txns">Txns</td>
-                                <td data-i18n="generator">Generator</td>
-                            </tr>
-                        </thead>
-                        <tbody id="block-list"></tbody>
-                    </table>
-                </div>
-                <div class="peerinfo">
-                    <h3 data-i18n="peers">Connected Peers</h3>
-                    <table id="peer-table">
-                        <thead>
-                            <tr>
-                                <td data-i18n="Index">Index</td>
-                                <td class="narrow" data-i18n="address">Address</td>
-                                <td data-i18n="user agent">User Agent</td>
-                                <td class="narrow" data-i18n="ping">Ping</td>
-                                <td class="narrow" data-i18n="time offset">Time Offset</td>
-                                <td class="narrow" data-i18n="ban score">Ban Score</td>
-                                <td class="narrow" data-i18n="direction">Direction</td>
-                                <td class="narrow" data-i18n="read">Read</td>
-                                <td class="narrow" data-i18n="written">Written</td>
-                                <td class="narrow" data-i18n="Disconnect">Disconnect</td>
-                            </tr>
-                        </thead>
-                        <tbody id="peer-list"></tbody>
-                    </table>
-                    <div class="form" class="add-peer">
-                        <legend data-i18n="add peer">Add Peer</legend>
-                        <div class="field-row">
-                            <label data-i18n="address">Address</label>
-                            <input type="text" id="ip_address">
-                        </div>
-                        <div class="field-row">
-                            <label data-i18n="port">Port</label>
-                            <input type="text" id="ip_port" value="28453">
-                        </div>
-                        <button id="add_peer_btn" data-i18n="add peer">Add Peer</button>
-                    </div>
-                </div>
-                <div class="config">
-                    <div class="form">
-                        <legend data-i18n="explorer">Explorer</legend>
-                        <div class="field-row">
-                            <label data-i18n="Block">Block</label>
-                            <input type="text" id="block">
-                        </div>
-                        <div class="field-row">
-                            <label data-i18n="Block Height">Block Height</label>
-                            <input type="text" id="blockHeight">
-                        </div>
-                        <div class="field-row">
-                            <label data-i18n="Transaction">Transaction</label>
-                            <input type="text" id="tx">
-                        </div>
-                        <div class="field-row">
-                            <label data-i18n="Account">Account</label>
-                            <input type="text" id="account">
-                        </div>
-                        <button id="explorer_save" data-i18n="Save">Local Save</button>
-                    </div>
-                </div>
+                
                 <div class="about">
                     <p>
                         Blacknet Version <span class='overview_version strong'></span>.<br /> Copyright © 2018-2019
@@ -417,10 +332,24 @@
                             </tr>
                         </thead>
                         <tbody id="leases-list">
-                            <tr>
-                                <td colspan="5" class="text-center">No out leases yet</td>
+                            <tr class="loading-spinner">
+                                <td colspan="5">
+                                    <div class="spinner">
+                                        <div class="rect1"></div>
+                                        <div class="rect2"></div>
+                                        <div class="rect3"></div>
+                                        <div class="rect4"></div>
+                                        <div class="rect5"></div>
+                                    </div>
+                                    <div class="tx-progress text-center"></div>
+                                </td>
                             </tr>
                         </tbody>
+                        <tfoot>
+                            <tr class="no_out_leases_msg">
+                                <td colspan="5" class="text-center">No out leases yet</td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
             </div>

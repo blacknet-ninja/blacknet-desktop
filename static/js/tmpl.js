@@ -20,7 +20,7 @@ Blacknet.template = {
 
         let amount = txData.amount, tmpl, txfee, type, status, txaccount = tx.from;
 
-        type = Blacknet.getTxTypeName(dataType);
+        type = Blacknet.getTxTypeName(tx, dataType);
         txfee = Blacknet.getFormatBalance(tx.fee);
 
         if (dataType == 254) {
@@ -106,7 +106,7 @@ Blacknet.template = {
         let link = `<a target="_blank" href="${Blacknet.explorer.account + tx.publicKey}">${tx.publicKey}</a>`
         let amount = Blacknet.getFormatBalance(tx.amount);
         let tmpl =
-            `<tr>
+            `<tr class="leases">
                 <td>${index + 1}</td>
                 <td>${link}</td>
                 <td>${tx.height}</td>
@@ -169,8 +169,9 @@ Blacknet.template = {
         }
     },
 
-    message: async function (msg, type) {
-        var icon
+    message: async function (msg, type, duration) {
+        var icon;
+        clearTimeout(this.timerid);
         switch (type) {
             case "success":
                 icon = '<i class="fa fa-check-circle"></i>'
@@ -190,11 +191,30 @@ Blacknet.template = {
             </div>
         </div>`;
         var $msg = $(messageText)
+        console.log(duration)
         $(".blacknet-message").append($msg)
-        setTimeout(function () {
+        this.timerid = setTimeout(function () {
             $msg.remove()
-        }, 2000)
+        }, duration || 2000)
        
+    },
+
+    pinMessage : function(msg) {
+        
+        if(!this.msg){
+            var messageText = `<div class="blacknet-message-notice">
+                <div class="blacknet-message-notice-content">${msg}
+                </div>
+            </div>`;
+            this.$msg = $(messageText)
+            $(".blacknet-message").append(this.$msg)
+        }
+
+        this.$msg.show().find('.blacknet-message-notice-content').text(msg);
+    },
+    hidePinMessage: function(){
+        this.$msg.hide();
     }
+
 
 };
