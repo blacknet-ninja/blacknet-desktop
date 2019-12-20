@@ -70,7 +70,6 @@ Blacknet.template = {
                 linkText = `<a target="_blank" href="${Blacknet.explorer.account + tx.to}">${tx.to}</a>`;
             }
         }
-        console.log(amount)
         amount = Blacknet.getFormatBalance(amount);
 
         tmpl =
@@ -79,7 +78,6 @@ Blacknet.template = {
                 <td class="narrow">${txText}</td>
                 <td class="left">${linkText}</td>
                 <td class="right"><span class="strong">${amount}</span></td>
-                <td class="left status" data-height="${tx.height}">${status}</td>
             </tr>`;
 
 

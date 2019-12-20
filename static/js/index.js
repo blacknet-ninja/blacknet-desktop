@@ -93,18 +93,14 @@ $(document).ready(function () {
         let mnemonic = $('#sign_mnemonic').val();
         mnemonic = $.trim(mnemonic);
         let message = $('#sign_message').val();
-        if(!Blacknet.verifyMnemonic(mnemonic)){
-            Blacknet.message("Invalid mnemonic", "warning")
-            $('#sign_mnemonic').focus()
-            return
-        }
+        
         if(!Blacknet.verifyMessage(message)){
             Blacknet.message("Invalid message", "warning")
             $('#sign_message').focus()
             return
         }
 
-        let signedMessage = blacknetjs.SignMessage(mnemonic, message);
+        let signedMessage = Blacknet.signMessage(message);
         $('#sign_result').text(signedMessage).parent().removeClass("hidden")
     }
     function verify() {
@@ -129,27 +125,6 @@ $(document).ready(function () {
 
         let result = blacknetjs.VerifyMessage(account, signature, message);
         $('#verify_result').text(result).parent().removeClass("hidden")
-    }
-    function mnemonic_info() {
-        let mnemonic = $('#mnemonic_info_mnemonic').val();
-        mnemonic = $.trim(mnemonic);
-        let postdata = {
-            mnemonic: mnemonic
-        };
-        if(!Blacknet.verifyMnemonic(mnemonic)){
-            Blacknet.message("Invalid mnemonic", "warning")
-            $('#mnemonic_info_mnemonic').focus()
-            return
-        }
-        Blacknet.post('/mnemonic', postdata, function (data) {
-            let html = '';
-            data.mnemonic = '[hidden]';
-
-            html += 'mnemonic: ' + data.mnemonic;
-            html += '\naddress: ' + data.address;
-            html += '\npublicKey: ' + data.publicKey;
-            $('#mnemonic_info_result').text(html).parent().removeClass("hidden")
-        });
     }
 
     function transfer_click(type) {
@@ -196,10 +171,7 @@ $(document).ready(function () {
             return 
         }
 
-        input_mnemonic(function (mnemonic) {
-
-            Blacknet.sendMoney(mnemonic, amount, to, message, encrypted);
-        });
+        Blacknet.sendMoney(amount, to, message, encrypted);
     }
 
     function lease() {
@@ -221,10 +193,7 @@ $(document).ready(function () {
             $('#lease_amount').focus()
             return
         }
-
-        input_mnemonic(function (mnemonic) {
-            Blacknet.lease(mnemonic, 'lease', amount, to, 0);
-        });
+        Blacknet.lease('lease', amount, to, 0);
     }
 
 
@@ -234,9 +203,7 @@ $(document).ready(function () {
         let amount = data.amount;
         let height = data.height;
 
-        input_mnemonic(function (mnemonic) {
-            Blacknet.lease(mnemonic, 'cancelLease', amount, to, height);
-        })
+        Blacknet.lease('cancelLease', amount, to, height);
     }
 
     function clearPassWordDialog() {
@@ -336,43 +303,6 @@ $(document).ready(function () {
         $('#ip_address').val('');
     }
 
-    Blacknet.ready(function () {
-
-        if (!localStorage.account) return;
-
-        let ws = new WebSocket("ws://" + location.host + "/api/v2/websocket");
-
-        ws.onopen = function(){
-            let blocks = {
-                command: "subscribe",
-                route: "block"
-            };
-            let wallet = {
-                command: "subscribe",
-                route: "wallet",
-                address: localStorage.account
-            };
-            ws.send(JSON.stringify(blocks));
-            ws.send(JSON.stringify(wallet));
-        };
-
-        ws.onmessage = function(message){
-            if (message.data) {
-                let response = JSON.parse(message.data);
-
-                if (response.route == "block") {
-                    blockStack.push(response.message);
-                } else if (response.route == "transaction") {
-                    Blacknet.renderTransaction(response.message, true);
-                    if(tx.time * 1000 > Date.now() - 1000*60){
-                        Blacknet.newTransactionNotify(response.message);
-                    }
-                }
-            }
-        };
-        
-    });
-
     async function disconnect(){
 
         let ret = await Blacknet.getPromise('/disconnectpeer/' + this.dataset.peerid + '/true');
@@ -425,7 +355,6 @@ $(document).ready(function () {
         .on("click", ".cancel_lease_btn", transfer_click('cancel_lease'))
         .on("click", "#sign", sign)
         .on("click", "#verify", verify)
-        .on("click", "#mnemonic_info", mnemonic_info)
         .on("click", "#add_peer_btn", addPeer)
         .on("click", "#switch_account", switchAccount)
         .on("click", "#new_account", newAccount)
@@ -443,3 +372,5 @@ $(document).ready(function () {
 
 
 });
+
+if (window.module) module = window.module;

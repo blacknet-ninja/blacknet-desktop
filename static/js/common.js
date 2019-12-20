@@ -15,13 +15,14 @@ void function () {
     const blockListEl = $('#block-list'), apiVersion = "https://blnmobiledaemon.blnscan.io/api/v2", body = $("body");;
     const progressStats = $('.progress-stats, .progress-stats-text');
     const dialogPassword = $('.dialog.password'), dialogConfirm = $('.dialog.confirm'), mask = $('.mask');
-    const account = localStorage.account;
+    
     const dialogAccount = $('.dialog.account');
     const notificationNode = $('.notification.tx').first();
     const txList = $('#tx-list');
     const explorerApi = "https://blnscan.io/api";
 
     const bln = new blacknetjs();
+    let mnemonic, currentAccount;
 
     Blacknet.explorer = {
         block: 'https://blnscan.io/',
@@ -38,18 +39,14 @@ void function () {
 
         await Blacknet.wait(1000);
 
-        if (account) {
+        if (mnemonic) {
 
             mask.removeClass('init').hide();
             dialogAccount.hide();
             Blacknet.showProgress();
 
-            $('.overview').find('.overview_account').text(account);
-
-            if (localStorage.isStaking) {
-                $('.is_staking').text(localStorage.isStaking);
-            }
-
+            $('.overview').find('.overview_account').text(currentAccount);
+            Blacknet.ready();
             mask.on('click', function () {
                 mask.hide();
                 dialogPassword.hide();
@@ -60,22 +57,19 @@ void function () {
             dialogAccount.find('.account-input').show();
             dialogAccount.find('.enter').unbind().on('click', async function () {
 
-                let account = dialogAccount.find('.account_text').val();
-                account = $.trim(account);
-                let getaccount = blacknetjs.Address(account);
+                mnemonic = dialogAccount.find('.account_text').val();
+                mnemonic = $.trim(mnemonic);
+                currentAccount = blacknetjs.Address(mnemonic);
 
-                if (Blacknet.verifyAccount(account)) {
-                    localStorage.account = account;
-                } else if (Blacknet.verifyMnemonic(account)) {
-                    if(getaccount){
-                        localStorage.account = getaccount;
-                    }
+                if (Blacknet.verifyMnemonic(mnemonic) && currentAccount) {
+                    
+                    Blacknet.init();
                 } else {
-                    Blacknet.message("Invalid account/mnemonic", "warning")
+
+                    Blacknet.message("Invalid mnemonic", "warning")
                     dialogAccount.find('.account_text').focus()
-                    return
+                    return;
                 }
-                location.reload();
             });
         }
     };
@@ -84,12 +78,19 @@ void function () {
 
         let balance = $('.overview_balance'),
             confirmedBalance = $('.overview_confirmed_balance'),
-            stakingBalance = $('.overview_staking_balance');;
+            stakingBalance = $('.overview_staking_balance'),
+            inLeasesBalance = $('.inLeasesBalance'),
+            outLeasesBalance = $('.outLeasesBalance'),
+            realBalance = $('.realBalance');;
             
-        $.getJSON(explorerApi + '/account/ledger/' + account, function (data) {
+        $.getJSON(explorerApi + '/account/ledger/' + currentAccount, function (data) {
             balance.html(Blacknet.toBLNString(data.balance));
             confirmedBalance.html(Blacknet.toBLNString(data.confirmedBalance));
             stakingBalance.html(Blacknet.toBLNString(data.stakingBalance));
+
+            inLeasesBalance.html(Blacknet.toBLNString(data.inLeasesBalance));
+            outLeasesBalance.html(Blacknet.toBLNString(data.outLeasesBalance));
+            realBalance.html(Blacknet.toBLNString(data.realBalance));
 
         }).fail(function () {
             balance.html('0.00000000 BLN');
@@ -229,7 +230,7 @@ void function () {
         });
     };
 
-    Blacknet.sendMoney = function (mnemonic, amount, to, message, encrypted) {
+    Blacknet.sendMoney = function (amount, to, message, encrypted) {
 
         let fee = 100000, amountText;
 
@@ -267,7 +268,7 @@ void function () {
         dialogPassword.find('.mnemonic').val('');
     }
 
-    Blacknet.lease = function (mnemonic, type, amount, to, height) {
+    Blacknet.lease = function (type, amount, to, height) {
 
         let fee = 100000, amountText, type_text = type == 'lease' ? 'lease' : 'cancel lease';
 
@@ -373,7 +374,7 @@ void function () {
     }
 
     Blacknet.initRecentTransactions = async function () {
-        let transactions = await Blacknet.getPromise(explorerApi + '/account/txns/' + account, 'json');
+        let transactions = await Blacknet.getPromise(explorerApi + '/account/txns/' + currentAccount, 'json');
         await Blacknet.renderTxs(transactions);
     };
 
@@ -381,13 +382,12 @@ void function () {
         type = type || '';
         txList.html('');
 
-        let txArray = await Blacknet.getPromise(explorerApi + '/account/txns/' + account + '?type=' + type, 'json');
+        let txArray = await Blacknet.getPromise(explorerApi + '/account/txns/' + currentAccount + '?type=' + type, 'json');
         let defaultTxAmount = 100, txProgress = $('.tx-progress'),
             showMore = $('.tx-foot .show_more_txs'),
             noTxYet = $('.tx-foot .no_tx_yet');
 
 
-            console.log(txArray)
         let renderArray = txArray;
 
         
@@ -457,7 +457,6 @@ void function () {
             await Blacknet.renderTxStatus(0, node[0]);
             return;
         }
-        console.log(tx.data.amount);
 
         node = await Blacknet.template.transaction(tx, account);
         prepend ? node.prependTo(txList) : node.appendTo(txList);
@@ -466,8 +465,7 @@ void function () {
 
     Blacknet.renderLease = async function () {
 
-        let outLeases = await Blacknet.getPromise(explorerApi + '/outleases/' + account);
-        console.log(outLeases)
+        let outLeases = await Blacknet.getPromise(explorerApi + '/outleases/' + currentAccount);
         $('.cancel_lease_tab').show();
 
         if (outLeases.length > 0) {
@@ -483,7 +481,7 @@ void function () {
         let confirmations = Blacknet.ledger.height - height + 1, statusText = 'Confirmed';
         if (height == 0) {
 
-            confirmations = await Blacknet.getPromise('/wallet/confirmations/' + account + '/' + hash);
+            confirmations = await Blacknet.getPromise('/wallet/confirmations/' + currentAccount + '/' + hash);
             statusText = `${confirmations} Confirmations`;
 
         } else if (confirmations < DEFAULT_CONFIRMATIONS) {
@@ -517,7 +515,7 @@ void function () {
         } else if (type == 254) {
             name = "Generated";
         } else if (type == 0) {
-            if (tx.from == account) {
+            if (tx.from == currentAccount) {
                 name = "Sent to";
             } else {
                 name = "Received from";
@@ -602,13 +600,7 @@ void function () {
             }
         }
     }
-
-    Blacknet.getPeerInfo = async function () {
-
-        let peers = await Blacknet.getPromise(apiVersion + '/peers', 'json');
-        $('#peer-list').html('');
-        peers.map(Blacknet.template.peer);
-    }
+    
 
 
     Blacknet.ready = async function (callback) {
@@ -625,22 +617,28 @@ void function () {
         }
         Blacknet.initExplorer();
 
-        Blacknet.init();
         await Blacknet.balance();
         await Blacknet.network();
         await Blacknet.initRecentBlocks();
 
-        if (account) {
+        if (currentAccount) {
             await Blacknet.initRecentTransactions();
             Blacknet.renderLease();
         }
-
-        callback();
     };
 
     Blacknet.refreshBalance = async function () {
 
         await Blacknet.balance();
+    };
+
+    Blacknet.signMessage =  function (message) {
+        if(!Blacknet.verifyMnemonic(mnemonic)){
+            Blacknet.message("Invalid mnemonic", "warning")
+            $('#sign_mnemonic').focus()
+            return
+        }
+        return  blacknetjs.SignMessage(mnemonic, message);
     };
 
     Blacknet.initExplorer = function () {
@@ -653,7 +651,7 @@ void function () {
 
     };
 
-    const timePeerInfo = Blacknet.throttle(Blacknet.getPeerInfo, 1000);
+    
     Blacknet.network = async function () {
 
         Blacknet.ledger = await Blacknet.getPromise( apiVersion + '/ledger', 'json');
@@ -662,16 +660,8 @@ void function () {
         Blacknet.renderStatus();
         Blacknet.renderOverview();
 
-        timePeerInfo();
     };
 
-    /**
-     * verify mnemonic
-     * @method verifyMnemonic
-     * @for Blacknet
-     * @param {string} mnemonic
-     * @return {boolean} true/false
-     */
     Blacknet.verifyMnemonic = function (mnemonic) {
         if (Object.prototype.toString.call(mnemonic) === "[object String]"
             && mnemonic.split(" ").length == 12) {
@@ -679,13 +669,7 @@ void function () {
         }
         return false
     }
-    /**
-     * verify account address
-     * @method verifyAccount
-     * @for Blacknet
-     * @param {string} account
-     * @return {boolean} true/false
-     */
+    
     Blacknet.verifyAccount = function (account) {
         if (Object.prototype.toString.call(account) === "[object String]" &&
             account.length > 21 && /^blacknet[a-z0-9]{59}$/.test(account)) {
@@ -693,52 +677,29 @@ void function () {
         }
         return false
     }
-    /**
-     * verify amount
-     * @method verifyAmount
-     * @for Blacknet
-     * @param {string} amount
-     * @return {boolean} true/false
-     */
+    
     Blacknet.verifyAmount = function (amount) {
         if (/\d+/.test(amount) && amount > 0) {
             return true
         }
         return false
     }
-    /**
-     * verify message
-     * @method verifyMessage
-     * @for Blacknet
-     * @param {string} message
-     * @return {boolean} true/false
-     */
+    
     Blacknet.verifyMessage = function (message) {
         if (Object.prototype.toString.call(message) === "[object String]" && message.length > 0) {
             return true
         }
         return false
     }
-    /**
-     * verify sign
-     * @method verifySign
-     * @for Blacknet
-     * @param {string} sign
-     * @return {boolean} true/false
-     */
+    
+
     Blacknet.verifySign = function (sign) {
         if (Object.prototype.toString.call(sign) === "[object String]" && sign.length === 128) {
             return true
         }
         return false
     }
-    /**
-     * verify network address
-     * @method verifyNetworkAddress
-     * @for Blacknet
-     * @param {string} network address
-     * @return {boolean} true/false
-     */
+    
     Blacknet.verifyNetworkAddress = function (address) {
         // ipv4 | ipv6 | tor | i2p
         if (Object.prototype.toString.call(address) === "[object String]" &&
@@ -747,13 +708,7 @@ void function () {
         }
         return false
     }
-    /**
-     * verify network port
-     * @method verifyNetworkPort
-     * @for Blacknet
-     * @param {string} port
-     * @return {boolean} true/false
-     */
+    
     Blacknet.verifyNetworkPort = function (port) {
         if (/\d+/.test(port) && port >= 0 && port <= 65535) {
             return true
@@ -792,7 +747,7 @@ void function () {
     });
 
 
-
+    Blacknet.init();
 
     window.Blacknet = Blacknet;
 }();

@@ -57,19 +57,10 @@
                         <a href="#" data-index="sign" data-i18n="sign/verify message">Sign/Verify Message</a>
                     </li>
                     <li>
-                        <a href="#" data-index="peerinfo" data-i18n="peers">Peers</a>
-                    </li>
-                    <li>
                         <a href="#" data-index="recentblocks" data-i18n="blocks">Blocks</a>
                     </li>
                     <li>
-                        <a href="#" data-index="info" data-i18n="mnemonic info">Mnemonic info</a>
-                    </li>
-                    <li>
-                        <a href="#" data-index="config" data-i18n="Config">Config</a>
-                    </li>
-                    <li>
-                        <a href="#" data-index="about" data-i18n="About Blacknet">About Blacknet</a>
+                        <a href="#" data-index="about" data-i18n="About Blacknet Lightly">About Blacknet Lightly</a>
                     </li>
                 </ul>
             </div>
@@ -96,6 +87,18 @@
                             <tr>
                                 <td data-i18n="staking balance">Staking Balance</td>
                                 <td class="overview_staking_balance strong">0.00000000 BLN</td>
+                            </tr>
+                            <tr>
+                                <td data-i18n="inLeasesBalance">In Leases Balance</td>
+                                <td class="inLeasesBalance strong">0.00000000 BLN</td>
+                            </tr>
+                            <tr>
+                                <td data-i18n="outLeasesBalance">Out Leases Balance</td>
+                                <td class="outLeasesBalance strong">0.00000000 BLN</td>
+                            </tr>
+                            <tr>
+                                <td data-i18n="Real Balance">Real Balance</td>
+                                <td class="realBalance strong">0.00000000 BLN</td>
                             </tr>
                         </tbody>
                     </table>
@@ -153,27 +156,6 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="staking">
-                    <h3 data-i18n="staking info">Staking Info</h3>
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td data-i18n="isstaking">isStaking</td>
-                                <td class="is_staking">false</td>
-                            </tr>
-                            <tr>
-                                <td data-i18n="start/stop/refresh">
-                                    Start/Stop/Refresh
-                                </td>
-                                <td>
-                                    <button id="refresh_staking" data-i18n="refresh">Refresh</button>
-                                    <button id="stop_staking" data-i18n="stop staking">Stop staking</button>
-                                    <button id="start_staking" data-i18n="start staking">Start staking</button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
                 <div class="transactions">
                     <h3 data-i18n="recent transactions">Recent Transactions</h3>
                     <div class="filter" ng-init="type='all'">
@@ -190,7 +172,6 @@
                                 <td class="left" data-i18n="type">Type</td>
                                 <td class="left" data-i18n="account">Account</td>
                                 <td class="right" data-i18n="amount">Amount</td>
-                                <td class="left"></td>
                             </tr>
                         </thead>
                         <tbody id="tx-list">
@@ -263,10 +244,6 @@
                 <div class="sign">
                     <div class="form">
                         <legend data-i18n="sign message">Sign message</legend>
-                        <div class="field-row">
-                            <label data-i18n="mnemonic">Mnemonic</label>
-                            <input type="password" id="sign_mnemonic">
-                        </div>
                         <div class="field-row">
                             <label data-i18n="message">Message</label>
                             <input type="text" id="sign_message">
@@ -508,7 +485,7 @@
                     <div class="rect5"></div>
                 </div>
                 <p class="account-input">
-                    <input type="password" class='account_text' placeholder="Your account or mnemonic...">
+                    <input type="password" class='account_text' placeholder="Input your mnemonic">
                 </p>
             </div>
             <div class="account-input">
@@ -565,7 +542,6 @@
         <script type="text/javascript" src="js/tmpl.js"></script>
         <script type="text/javascript" src="js/i18n.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
-        <script>if (window.module) module = window.module;</script>
 
 </body>
 
