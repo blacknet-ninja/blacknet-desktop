@@ -50,6 +50,10 @@
                     <li>
                         <a href="#" data-index="cancel_lease" data-i18n="cancel lease">Cancel Lease</a>
                     </li>
+                    <!-- <li>
+                        <a href="#" data-index="qrcode" data-i18n="qrcode">QR Code</a>
+                    </li>
+                     -->
                     <li>
                         <a href="#" data-index="transactions" data-i18n="transactions">Transactions</a>
                     </li>
@@ -71,8 +75,19 @@
                                 <td>
                                     <span class="overview_account"></span>
                                     <a href="#" id="switch_account" data-i18n="Logout">Logout</a>
+                                    
                                 </td>
                             </tr>
+                            <tr>
+                                <td data-i18n="QR Code">QR Code</td>
+                                <td>
+                                    <div style="background:#3B3B3B;width: 100px;height: 100px">
+                                        <canvas id="qr"></canvas>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            
                             <tr>
                                 <td data-i18n="balance">Balance</td>
                                 <td class="overview_balance strong">0.00000000 BLN</td>
@@ -273,7 +288,9 @@
                     </div>
                 </div>
                 
-                <div class="generate"></div>
+                <div class="qrcode">
+                    
+                </div>
                 
                 <div class="about">
                     <p>
@@ -466,6 +483,7 @@
         <footer></footer>
         <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
         <script type="text/javascript" src="js/bignumber.min.js"></script>
+        <script type="text/javascript" src="js/qrious.js"></script>
         <script type="text/javascript" src="js/blacknetjs-lib.js"></script>
         <script type="text/javascript" src="js/common.js"></script>
         <script type="text/javascript" src="js/tmpl.js"></script>

@@ -88,6 +88,13 @@ $(document).ready(function () {
         localStorage.hashIndex = index;
 
         if(index == 'cancel_lease') Blacknet.renderLease();
+        if(index == 'overview'){
+            Blacknet.balance();
+            Blacknet.network();
+        }
+        if(index == 'transactions'){
+            $('.transactions .filter .active').trigger('click');
+        };
         return false;
     }
 

@@ -61,6 +61,13 @@ void function () {
                 mnemonic = $.trim(mnemonic);
                 currentAccount = blacknetjs.Address(mnemonic);
 
+                var qr = new QRious({
+                    element: document.getElementById('qr'), 
+                    value: 'blacknet:' + currentAccount,
+                    background: '#3B3B3B',
+                    foreground: '#ccc'
+                })
+
                 if (Blacknet.verifyMnemonic(mnemonic) && currentAccount) {
                     Blacknet.init(true);
                 } else {
@@ -414,7 +421,7 @@ void function () {
 
     Blacknet.renderLease = async function () {
 
-        let nomore = $('#leases-list').find('.no_out_leases_msg'), loading = $('#leases-list').find('.loading-spinner');
+        let nomore = $('#leases-table').find('.no_out_leases_msg'), loading = $('#leases-list').find('.loading-spinner');
         loading.show();
         nomore.hide();
         $('#leases-list').find('.leases').remove();
