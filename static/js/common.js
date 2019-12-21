@@ -86,7 +86,12 @@ void function () {
 
         mnemonic = blacknetjs.Mnemonic();
         currentAccount = blacknetjs.Address(mnemonic);
-
+        var qr = new QRious({
+            element: document.getElementById('qr'), 
+            value: 'blacknet:' + currentAccount,
+            background: '#3B3B3B',
+            foreground: '#ccc'
+        })
         $('#new_account_text').val(currentAccount);
         $('#new_mnemonic').val(mnemonic);
         window.isGenerated = true;
