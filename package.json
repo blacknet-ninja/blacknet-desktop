@@ -19,7 +19,8 @@
    },
    "dependencies": {},
    "build": {
-      "appId": "Blacknet",
+      "appId": "blacknet",
+      "artifactName": "blacknet-desktop-${version}.${ext}",
       "mac": {
          "category": "public.app-category.Wallets"
       },
