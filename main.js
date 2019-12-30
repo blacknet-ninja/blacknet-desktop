@@ -1,13 +1,12 @@
 
 const { app, BrowserWindow } = require('electron');
 
-// 创建 eventEmitter 对象
 let mainWindow;
 
 app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') {
+    // if (process.platform !== 'darwin') {
         app.quit()
-    }
+    // }
 });
 
 app.on('ready', () => {
@@ -38,5 +37,6 @@ function openWindow(url) {
         
     });
     mainWindow.setMenu(null);
+
     return mainWindow;
 };

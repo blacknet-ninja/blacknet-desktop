@@ -17,8 +17,10 @@
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="css/font-awesome.min.css">
-    <meta http-equiv="content-security-policy" content="default-src 'self';connect-src https://blnmobiledaemon.blnscan.io https://blnscan.io ">
+    <meta http-equiv="content-security-policy"
+        content="default-src 'self';connect-src https://serialization-server.blnscan.io https://blnmobiledaemon.blnscan.io https://blnscan.io ">
 </head>
+
 <body>
     <div class="blacknet-message" id="blacknet-message">
     </div>
@@ -51,9 +53,8 @@
                         <a href="#" data-index="cancel_lease" data-i18n="cancel lease">Cancel Lease</a>
                     </li>
                     <!-- <li>
-                        <a href="#" data-index="qrcode" data-i18n="qrcode">QR Code</a>
-                    </li>
-                     -->
+                        <a href="#" data-index="encrypted_chat" data-i18n="encrypted chat">Encrypted Chat</a>
+                    </li> -->
                     <li>
                         <a href="#" data-index="transactions" data-i18n="transactions">Transactions</a>
                     </li>
@@ -75,19 +76,19 @@
                                 <td>
                                     <span class="overview_account"></span>
                                     <a href="#" id="switch_account" data-i18n="Logout">Logout</a>
-                                    
+
                                 </td>
                             </tr>
                             <tr>
                                 <td data-i18n="QR Code">QR Code</td>
                                 <td>
-                                    <div style="background:#3B3B3B;width: 100px;height: 100px">
+                                    <div class="qrcode">
                                         <canvas id="qr"></canvas>
                                     </div>
                                 </td>
                             </tr>
 
-                            
+
                             <tr>
                                 <td data-i18n="balance">Balance</td>
                                 <td class="overview_balance strong">0.00000000 BLN</td>
@@ -287,11 +288,119 @@
                         <p id="verify_result"></p>
                     </div>
                 </div>
-                
-                <div class="qrcode">
-                    
+                <div class="encrypted_chat">
+                    <div class="container clearfix">
+                        <div class="people-list" id="people-list">
+                            <div class="search">
+                                <input type="text" placeholder="search">
+                                <i class="fa fa-search"></i>
+                            </div>
+                            <ul class="list">
+                                <li class="clearfix">
+                                    <div class="chatabout">
+                                        <div class="name">Rat4</div>
+                                        <div class="status">
+                                            <i class="fa fa-lock online"></i>7 mins ago
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="clearfix">
+                                    <div class="chatabout">
+                                        <div class="name">Asoshi</div>
+                                        <div class="status">
+                                            <i class="fa fa-lock online"></i> 7 mins ago
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="clearfix">
+                                    <div class="chatabout">
+                                        <div class="name">Seven God</div>
+                                        <div class="status">
+                                            <i class="fa fa-lock online"></i> 17 mins ago
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="clearfix">
+                                    <div class="chatabout">
+                                        <div class="name">Erica Hughes</div>
+                                        <div class="status">
+                                            <i class="fa fa-lock online"></i> online
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="chat">
+                            <div class="chat-header clearfix">
+                                <div class="chat-about">
+                                    <div class="chat-with">Chat with Rat4</div>
+                                    <div class="chat-num-messages">already 1 902 messages</div>
+                                </div>
+                                <i class="fa fa-star"></i>
+                            </div>
+                            <div class="chat-history">
+                                <ul>
+                                    <li class="clearfix">
+                                        <div class="message-data align-right">
+                                            <span class="message-data-time">10:10 AM, Today</span> &nbsp; &nbsp;
+                                            <span class="message-data-name">blacknet1fcemzzxna</span> <i class="fa fa-lock me"></i>
+                                        </div>
+                                        <div class="message other-message float-right">
+                                            Hi Rat4, how are you? How about blacknet 0.2.5?
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="message-data">
+                                            <span class="message-data-name"><i class="fa fa-lock online"></i>
+                                                Rat4</span>
+                                            <span class="message-data-time">10:12 AM, Today</span>
+                                        </div>
+                                        <div class="message my-message">
+                                            Will release soon!
+                                        </div>
+                                    </li>
+                                    <li class="clearfix">
+                                        <div class="message-data align-right">
+                                            <span class="message-data-time">10:14 AM, Today</span> &nbsp; &nbsp;
+                                            <span class="message-data-name">blacknet1fcemzzxna</span> <i class="fa fa-lock me"></i>
+                                        </div>
+                                        <div class="message other-message float-right">
+                                            ………………………………
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="message-data">
+                                            <span class="message-data-name"><i class="fa fa-lock online"></i>
+                                                Rat4</span>
+                                            <span class="message-data-time">10:20 AM, Today</span>
+                                        </div>
+                                        <div class="message my-message">
+                                            …………………………
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="message-data">
+                                            <span class="message-data-name"><i class="fa fa-lock online"></i>
+                                                Rat4</span>
+                                            <span class="message-data-time">10:31 AM, Today</span>
+                                        </div>
+                                        <i class="fa fa-lock online"></i>
+                                        <i class="fa fa-lock online"></i>
+                                        <i class="fa fa-lock online"></i>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="chat-message clearfix">
+                                <textarea name="message-to-send" id="message-to-send" placeholder="Type your message"
+                                    rows="3"></textarea>
+                                <i class="fa fa-file-o"></i> &nbsp;&nbsp;&nbsp;
+                                <i class="fa fa-file-image-o"></i>
+                                <button>Send</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                
+
                 <div class="about">
                     <p>
                         Blacknet Version <span class='overview_version strong'></span>.<br /> Copyright © 2018-2019
@@ -431,7 +540,8 @@
                     <div class="rect5"></div>
                 </div>
                 <p class="account-input">
-                    <input type="password" class='account_text' placeholder="Input your mnemonic">
+                    <input type="password"
+                        class='account_text' placeholder="Input your mnemonic">
                 </p>
             </div>
             <div class="account-input">

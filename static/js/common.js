@@ -267,14 +267,16 @@ void function () {
 
                 Blacknet.template.pinMessage("Request Pending...");
                 let from = blacknetjs.Address(mnemonic);
-                
+            
+                if(encrypted == 1){
+                    message = blacknetjs.Encrypt(mnemonic, from, message);
+                }
                 bln.jsonrpc.transfer(mnemonic, {
                     fee: fee,
                     amount: amount,
                     message: message,
                     from: from,
-                    to: to,
-                    encrypted: encrypted
+                    to: to
                 }).then((res)=>{
                     Blacknet.template.hidePinMessage();
                     if(res.body.length == 64){
@@ -415,7 +417,6 @@ void function () {
         }
         // if tx already render, update status
         if (node.html()) {
-            await Blacknet.renderTxStatus(0, node[0]);
             return;
         }
 
@@ -496,22 +497,6 @@ void function () {
         return new BigNumber(balance).dividedBy(1e8).toFixed(8) + ' BLN';
     };
 
-    Blacknet.renderTxStatus = async function (index, el) {
-
-        let statusText, node = $(el).find('.status');
-
-        if (node.text() == 'Confirmed') return;
-
-        statusText = await Blacknet.getStatusText(el.dataset.height, el.dataset.hash);
-        node.text(statusText);
-    };
-
-
-
-    Blacknet.refreshTxConfirmations = function () {
-
-        $.each($('#tx-list tr'), Blacknet.renderTxStatus);
-    };
 
     Blacknet.throttle = function (fn, threshhold = 250) {
 

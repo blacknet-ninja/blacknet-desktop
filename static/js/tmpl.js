@@ -18,7 +18,7 @@ Blacknet.template = {
         let dataType = tx.type;
         let txData = tx.data;
 
-        let amount = txData.amount, tmpl, txfee, type, status, txaccount = tx.from;
+        let amount = txData.amount, tmpl, txfee, type, txaccount = tx.from;
 
         type = Blacknet.getTxTypeName(tx, dataType);
         txfee = Blacknet.getFormatBalance(tx.fee);
@@ -29,13 +29,6 @@ Blacknet.template = {
         if (dataType == 0 && tx.from == account) {
             txaccount = txData.to;
         }
-
-        if (tx.time * 1000 < Date.now() - 1000 * 10) {
-            status = 'Confirmed';
-        } else {
-            status = await Blacknet.getStatusText(tx.height, tx.hash);
-        }
-
         let txText = type, linkText = '';
 
 
