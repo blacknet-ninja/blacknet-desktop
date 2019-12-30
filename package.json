@@ -1,7 +1,7 @@
 {
    "name": "blacknet-desktop",
    "main": "main.js",
-   "version": "1.0.2",
+   "version": "1.0.4",
    "description": "Blacknet-desktop is fast, because it uses servers that index the Blacknet blockchain.",
    "homepage": "https://gitlab.com/blacknet-ninja/blacknet-desktop",
    "author": {
