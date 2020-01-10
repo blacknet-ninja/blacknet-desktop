@@ -1,7 +1,7 @@
 {
    "name": "blacknet-desktop",
    "main": "main.js",
-   "version": "1.0.4",
+   "version": "1.1.0",
    "description": "Blacknet-desktop is fast, because it uses servers that index the Blacknet blockchain.",
    "homepage": "https://gitlab.com/blacknet-ninja/blacknet-desktop",
    "author": {
@@ -10,14 +10,16 @@
       "url": "https://gitlab.com/blacknet1fcemzzxna"
    },
    "devDependencies": {
-      "electron": "^7.1.7"
+      "electron": "^7.1.8"
    },
    "scripts": {
       "start": "electron .",
       "pack": "electron-builder --dir",
       "dist": "electron-builder -mwl --dir"
    },
-   "dependencies": {},
+   "dependencies": {
+      "blacknetjs": "^1.1.2"
+   },
    "build": {
       "appId": "blacknet",
       "artifactName": "blacknet-desktop-${version}.${ext}",

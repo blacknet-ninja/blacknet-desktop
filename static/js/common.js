@@ -256,7 +256,7 @@ void function () {
 
     Blacknet.sendMoney = function (amount, to, message, encrypted) {
 
-        let fee = 100000, amountText;
+        let amountText;
 
         amountText = new BigNumber(amount).toFixed(8);
         amount = new BigNumber(amount).times(1e8).toNumber();
@@ -265,14 +265,13 @@ void function () {
             to + '\n\n0.001 BLN added as transaction fee?', function (flag) {
                 if (!flag)  return;
 
-                Blacknet.template.pinMessage("Request Pending...");
+                Blacknet.template.pinMessage("Sending...");
                 let from = blacknetjs.Address(mnemonic);
             
                 if(encrypted == 1){
-                    message = blacknetjs.Encrypt(mnemonic, from, message);
+                    message = blacknetjs.Encrypt(mnemonic, to, message);
                 }
                 bln.jsonrpc.transfer(mnemonic, {
-                    fee: fee,
                     amount: amount,
                     message: message,
                     from: from,
@@ -369,7 +368,13 @@ void function () {
         txList.find('.preview').remove();
         txList.find('.loading-spinner').show();
         noTxYet.hide();
-        let txArray = await Blacknet.getPromise(explorerApi + '/account/txns/' + currentAccount + '?type=' + type, 'json');
+
+        let url = explorerApi + '/account/txns/' + currentAccount ;
+        if(type){
+            url = url + '?type=' + type;;
+        }
+
+        let txArray = await Blacknet.getPromise(url, 'json');
 
         if (txArray.length == 0) {
             noTxYet.show();
