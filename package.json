@@ -48,9 +48,13 @@
          }
       },
       "linux": {
-         "target": "deb",
          "executableName": "Blacknet-desktop",
-         "category": "public.app-category.Wallets"
+         "category": "public.app-category.Wallets",
+         "target": [
+            "deb",
+            "rpm",
+            "freebsd"
+         ]
       },
       "files": [
          {

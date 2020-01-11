@@ -6,20 +6,15 @@ PACKAGE_VERSION=$(cat package.json \
   | tr -d '[[:space:]]')
 
 
-echo $PACKAGE_VERSION
+echo "Start release $PACKAGE_VERSION"
 
-dmgsha256=`shasum -a 256 dist/blacknet-desktop-${PACKAGE_VERSION}.dmg`
-winsha256=`shasum -a 256 dist/blacknet-desktop-${PACKAGE_VERSION}.exe`
-liunxsha256=`shasum -a 256 dist/blacknet-desktop-${PACKAGE_VERSION}.deb`
+declare -a arr=("dmg" "exe" "deb" "rpm" "freebsd")
 
-dmgsha256=${dmgsha256:1:64}
-winsha256=${winsha256:1:64}
-liunxsha256=${liunxsha256:1:64}
+for name in "${arr[@]}"
+do
+  sha256=`shasum -a 256 dist/blacknet-desktop-${PACKAGE_VERSION}.${name}`
+  response=`curl --request POST  --silent --header "Private-Token: ${gitlab_private_token}" --form "file=@dist/blacknet-desktop-${PACKAGE_VERSION}.${name}" "https://gitlab.COM/api/v4/projects/blacknet-ninja%2Fblacknet-desktop/uploads"`
+  echo $response | jq -r '.markdown'
+  echo "$name: ${sha256:1:64}\n\n"
 
-echo "DMG sha256: $dmgsha256"
-echo "EXE sha256: $winsha256"
-echo "DEB sha256: $liunxsha256"
-
-curl --request POST --header "Private-Token: ${gitlab_private_token}" --form "file=@dist/blacknet-desktop-${PACKAGE_VERSION}.dmg" "https://gitlab.COM/api/v4/projects/blacknet-ninja%2Fblacknet-desktop/uploads"
-curl --request POST --header "Private-Token: ${gitlab_private_token}" --form "file=@dist/blacknet-desktop-${PACKAGE_VERSION}.exe" "https://gitlab.COM/api/v4/projects/blacknet-ninja%2Fblacknet-desktop/uploads"
-curl --request POST --header "Private-Token: ${gitlab_private_token}" --form "file=@dist/blacknet-desktop-${PACKAGE_VERSION}.deb" "https://gitlab.COM/api/v4/projects/blacknet-ninja%2Fblacknet-desktop/uploads"
+done
