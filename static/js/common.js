@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2019 Blacknet Team
+ * Copyright (c) 2018-2020 Blacknet Team
  *
  * Licensed under the Jelurida Public License version 1.1
  * for the Blacknet Public Blockchain Platform (the "License");
@@ -9,21 +9,33 @@
 
 void function () {
 
+    blacknetjs = require('blacknetjs');
+    window.$ = window.jQuery = require('./js/jquery-3.4.1.min.js');
+    window.BigNumber = require('./js/bignumber.min.js');
+    window.QRious = require('./js/qrious.js');
+    const ipc = require('electron').ipcRenderer
+
     const Blacknet = {};
     const DEFAULT_CONFIRMATIONS = 10;
-    const GENESIS_TIME = 1545555600;
     const apiVersion = "https://blnmobiledaemon.blnscan.io/api/v2", body = $("body");;
-    const progressStats = $('.progress-stats, .progress-stats-text');
     const dialogPassword = $('.dialog.password'), dialogConfirm = $('.dialog.confirm'), mask = $('.mask');
     
     const dialogAccount = $('.dialog.account');
-    const notificationNode = $('.notification.tx').first();
     const txList = $('#tx-list');
     const explorerApi = "https://blnscan.io/api";
 
     const bln = new blacknetjs();
     let mnemonic, currentAccount;
 
+    Blacknet.appversion = window.require('electron').remote.app.getVersion();
+
+    ipc.on('version_check', function(event, data){
+
+        if(data.version != Blacknet.appversion){
+            alert(`${data.version} has been released, please update your wallet.`);
+        }
+    });
+    ipc.send('start_listen');
     // for test
 
     Blacknet.explorer = {
@@ -130,7 +142,6 @@ void function () {
     };
 
 
-
     Blacknet.renderStatus = function () {
 
         let network = $('.network');
@@ -140,7 +151,7 @@ void function () {
         network.find('.height').html(ledger.height);
         network.find('.supply').html(new BigNumber(ledger.supply).dividedBy(1e8).toFixed(0));
         network.find('.connections').text(nodeinfo.outgoing + nodeinfo.incoming);
-        $('.overview_version').text(nodeinfo.version);
+        $('.overview_version').text(Blacknet.appversion);
 
         if (nodeinfo.warnings.length > 0) {
             warnings.text(nodeinfo.warnings);

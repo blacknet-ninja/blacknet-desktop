@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright (c) 2018-2019 Blacknet Team
+  ~ Copyright (c) 2018-2020 Blacknet Team
   ~
   ~ Licensed under the Jelurida Public License version 1.1
   ~ for the Blacknet Public Blockchain Platform (the "License");
@@ -52,9 +52,6 @@
                     <li>
                         <a href="#" data-index="cancel_lease" data-i18n="cancel lease">Cancel Lease</a>
                     </li>
-                    <!-- <li>
-                        <a href="#" data-index="encrypted_chat" data-i18n="encrypted chat">Encrypted Chat</a>
-                    </li> -->
                     <li>
                         <a href="#" data-index="transactions" data-i18n="transactions">Transactions</a>
                     </li>
@@ -62,7 +59,7 @@
                         <a href="#" data-index="sign" data-i18n="sign/verify message">Sign/Verify Message</a>
                     </li>
                     <li>
-                        <a href="#" data-index="about" data-i18n="About Blacknet">About Blacknet </a>
+                        <a href="#" data-index="about" data-i18n="About Blacknet">About Blacknet Desktop</a>
                     </li>
                 </ul>
             </div>
@@ -78,17 +75,12 @@
                                     <a href="#" id="switch_account" data-i18n="Logout">Logout</a>
 
                                 </td>
-                            </tr>
-                            <tr>
-                                <td data-i18n="QR Code">QR Code</td>
-                                <td>
+                                <td rowspan="4">
                                     <div class="qrcode">
                                         <canvas id="qr"></canvas>
                                     </div>
                                 </td>
                             </tr>
-
-
                             <tr>
                                 <td data-i18n="balance">Balance</td>
                                 <td class="overview_balance strong">0.00000000 BLN</td>
@@ -103,15 +95,15 @@
                             </tr>
                             <tr>
                                 <td data-i18n="inLeasesBalance">In Leases Balance</td>
-                                <td class="inLeasesBalance strong">0.00000000 BLN</td>
+                                <td colspan="2" class="inLeasesBalance strong">0.00000000 BLN</td>
                             </tr>
                             <tr>
                                 <td data-i18n="outLeasesBalance">Out Leases Balance</td>
-                                <td class="outLeasesBalance strong">0.00000000 BLN</td>
+                                <td colspan="2" class="outLeasesBalance strong">0.00000000 BLN</td>
                             </tr>
                             <tr>
                                 <td data-i18n="Real Balance">Real Balance</td>
-                                <td class="realBalance strong">0.00000000 BLN</td>
+                                <td colspan="2" class="realBalance strong">0.00000000 BLN</td>
                             </tr>
                         </tbody>
                     </table>
@@ -337,7 +329,8 @@
                                     <li class="clearfix">
                                         <div class="message-data align-right">
                                             <span class="message-data-time">10:10 AM, Today</span> &nbsp; &nbsp;
-                                            <span class="message-data-name">blacknet1fcemzzxna</span> <i class="fa fa-lock me"></i>
+                                            <span class="message-data-name">blacknet1fcemzzxna</span> <i
+                                                class="fa fa-lock me"></i>
                                         </div>
                                         <div class="message other-message float-right">
                                             Hi Rat4, how are you? How about blacknet 0.2.5?
@@ -356,7 +349,8 @@
                                     <li class="clearfix">
                                         <div class="message-data align-right">
                                             <span class="message-data-time">10:14 AM, Today</span> &nbsp; &nbsp;
-                                            <span class="message-data-name">blacknet1fcemzzxna</span> <i class="fa fa-lock me"></i>
+                                            <span class="message-data-name">blacknet1fcemzzxna</span> <i
+                                                class="fa fa-lock me"></i>
                                         </div>
                                         <div class="message other-message float-right">
                                             ………………………………
@@ -397,7 +391,7 @@
 
                 <div class="about">
                     <p>
-                        Blacknet Version <span class='overview_version strong'></span>.<br /> Copyright © 2018-2019
+                        Blacknet Desktop Version <span class='overview_version strong'></span>.<br /> Copyright © 2018-2020
                         Blacknet Team.<br />
                         <span data-i18n="This software uses experimental cryptography.">This software uses experimental
                             cryptography.</span><br />
@@ -408,6 +402,7 @@
                         <span data-i18n="For licensing information see">For licensing information see</span> <a
                             href="LICENSE.txt" target="_blank">LICENSE</a> and <a href="3RD-PARTY-LICENSES.txt"
                             target="_blank">3RD-PARTY-LICENSES</a>.
+                        
                     </p>
                 </div>
                 <div class="lease">
@@ -560,8 +555,7 @@
                     <div class="rect5"></div>
                 </div>
                 <p class="account-input">
-                    <input type="password"
-                        class='account_text' placeholder="Input your mnemonic">
+                    <input type="password" class='account_text' placeholder="Input your mnemonic">
                 </p>
             </div>
             <div class="account-input">
@@ -611,14 +605,9 @@
             <p>Amount: <span class="amount"></span> Type: <span class="type"></span></p>
         </div>
         <footer></footer>
-        <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
-        <script type="text/javascript" src="js/bignumber.min.js"></script>
-        <script type="text/javascript" src="js/qrious.js"></script>
         <script type="text/javascript" src="js/common.js"></script>
         <script type="text/javascript" src="js/tmpl.js"></script>
         <script type="text/javascript" src="js/i18n.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
-
 </body>
-
 </html>

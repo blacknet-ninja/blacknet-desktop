@@ -1,6 +1,7 @@
 
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow,ipcMain } = require('electron');
 
+const request = require('request');
 let mainWindow;
 
 app.on('window-all-closed', () => {
@@ -9,8 +10,24 @@ app.on('window-all-closed', () => {
     // }
 });
 
+const versionURL = 'https://gitlab.com/api/v4/projects/blacknet-ninja%2Fblacknet-desktop/repository/tags';
 app.on('ready', () => {
     openWindow();
+
+    ipcMain.on('start_listen', (event, arg) => {
+
+        request({url: versionURL, json: true}, function(err, res, req){
+            if(!err){
+                let data = {};
+                data.version = res.body[0].name;
+                data.message = res.body[0].message;
+                event.reply('version_check', data);
+            }
+
+        });
+
+    });
+
 });
 
 
