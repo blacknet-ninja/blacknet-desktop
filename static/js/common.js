@@ -24,6 +24,8 @@ void function () {
     const bln = new blacknetjs();
     let mnemonic, currentAccount;
 
+    // for test
+
     Blacknet.explorer = {
         block: 'https://blnscan.io/',
         blockHeight: 'https://blnscan.io/',
@@ -43,7 +45,6 @@ void function () {
 
             mask.removeClass('init').hide();
             dialogAccount.hide();
-            Blacknet.showProgress();
 
             $('.overview').find('.overview_account').text(currentAccount);
             Blacknet.ready();
@@ -51,6 +52,7 @@ void function () {
                 mask.hide();
                 dialogPassword.hide();
                 dialogConfirm.hide();
+                $('.dialog').hide();
             });
         } else {
             dialogAccount.find('.spinner').hide();
@@ -116,6 +118,8 @@ void function () {
             outLeasesBalance.html(Blacknet.toBLNString(data.outLeasesBalance || 0));
             realBalance.html(Blacknet.toBLNString(data.realBalance || 0));
 
+            Blacknet.accountInfo = data;
+
         }).fail(function () {
             balance.html('0.00000000 BLN');
         });
@@ -156,7 +160,6 @@ void function () {
             let value = ledger[key];
             if (key == 'blockTime') {
                 value = Blacknet.unix_to_local_time(value);
-                Blacknet.renderProgressBar(ledger[key]);
             } else if (key == 'height') {
                 $('.overview_height').prop('href', Blacknet.explorer.blockHeight + value);
             } else if (key == 'blockHash') {
@@ -167,61 +170,6 @@ void function () {
             $('.overview_' + key).text(value);
         }
 
-        // let staking = await Blacknet.getPromise('/staking');
-
-        // for (let key in staking) {
-
-        //     $('.staking_info').find('.' + key).text(staking[key]);
-        // }
-
-    };
-
-    Blacknet.renderProgressBar = async function (timestamp) {
-
-        let secs = Date.now() / 1000 - timestamp, totalSecs, pecent, timeBehindText = "", now = Date.now();
-        let HOUR_IN_SECONDS = 60 * 60;
-        let DAY_IN_SECONDS = 24 * 60 * 60;
-        let WEEK_IN_SECONDS = 7 * 24 * 60 * 60;
-        let YEAR_IN_SECONDS = 31556952; // Average length of year in Gregorian calendar
-
-        if (secs < 5 * 60) {
-            timeBehindText = undefined;
-        } else if (secs < 2 * DAY_IN_SECONDS) {
-            timeBehindText = (secs / HOUR_IN_SECONDS).toFixed(2) + " hour(s)";
-        } else if (secs < 2 * WEEK_IN_SECONDS) {
-            timeBehindText = (secs / DAY_IN_SECONDS).toFixed(2) + " day(s)";
-        } else if (secs < YEAR_IN_SECONDS) {
-            timeBehindText = (secs / WEEK_IN_SECONDS).toFixed(2) + " week(s)";
-        } else {
-            let years = secs / YEAR_IN_SECONDS;
-            let remainder = secs % YEAR_IN_SECONDS;
-            timeBehindText = years.toFixed(2) + " year(s) and " + remainder.toFixed(2) + "week(s)";
-        }
-
-        if (!Blacknet.startTime) {
-            Blacknet.startTime = GENESIS_TIME;
-        }
-        Blacknet.timeBehindText = timeBehindText;
-
-        if (timeBehindText == undefined) {
-            progressStats.hide();
-            return;
-        }
-
-        totalSecs = Date.now() / 1000 - Blacknet.startTime;
-        pecent = (secs * 100) / totalSecs;
-
-        pecent = 100 - pecent;
-
-        $('.progress-bar').css('width', `${pecent}%`);
-        $('.progress-stats-text').text(timeBehindText + " behind");
-    }
-
-    Blacknet.showProgress = function () {
-
-        if (Blacknet.timeBehindText != undefined) {
-            progressStats.show();
-        }
     };
 
     Blacknet.get = function (url, callback) {
@@ -254,15 +202,55 @@ void function () {
         });
     };
 
-    Blacknet.sendMoney = function (amount, to, message, encrypted) {
+    Blacknet.initContacts = async function(){
+
+        let txns = await Blacknet.getPromise(explorerApi + '/contact/' + currentAccount);
+        let contacts = [];
+        txns.map((tx)=>{
+            let msg = tx.data.message.replace('new contact: ', ''), contact = {};
+            contact.account = tx.to;
+            contact.name = blacknetjs.Decrypt(mnemonic, currentAccount, msg);
+            contacts.push(contact);
+        });
+        
+        Blacknet.contacts = contacts;
+        Blacknet.renderContacts();
+    };
+    Blacknet.renderContacts = function(){
+        $('#contact-list').html('');
+        Blacknet.contacts.forEach(Blacknet.template.contact);
+    };
+
+    Blacknet.newContact = function(name, account){
+
+        if(Blacknet.accountInfo.confirmedBalance < 1){
+            return;
+        }
+
+        let message = 'new contact: ' + blacknetjs.Encrypt(mnemonic, currentAccount, name);
+        let confirmMessage = '\n for new contact';
+        Blacknet.sendMoney(0.1, account, message, 0, confirmMessage, function(){
+            Blacknet.contacts.push({
+                name, account
+            });
+            Blacknet.renderContacts();
+            let node = $('.contacts-dialog');
+            node.find('.name').val(''); 
+            node.find('.account').val('');
+        });
+        
+    };
+
+    Blacknet.sendMoney = function (amount, to, message, encrypted, confirmMessage, callback) {
 
         let amountText;
+        confirmMessage = confirmMessage || '';
 
         amountText = new BigNumber(amount).toFixed(8);
         amount = new BigNumber(amount).times(1e8).toNumber();
 
         Blacknet.confirm('Are you sure you want to send?\n\n' + amountText + ' BLN to \n' +
-            to + '\n\n0.001 BLN added as transaction fee?', function (flag) {
+            to + '' + confirmMessage, function (flag) {
                 if (!flag)  return;
 
                 Blacknet.template.pinMessage("Sending...");
@@ -278,12 +266,18 @@ void function () {
                     to: to
                 }).then((res)=>{
                     Blacknet.template.hidePinMessage();
-                    if(res.body.length == 64){
-                        $('#transfer_result').text(res.body).parent().removeClass("hidden");
+                    if(res.body.length == 64 ){
+                        Blacknet.message('Send Success', "success");
+                        if(confirmMessage.length == 0){
+                            $('#transfer_result').text(res.body).parent().removeClass("hidden");
+                            Blacknet.clearPassWordDialog();
+                        }
+                        if(callback) callback();
                     }else{
                         Blacknet.message(res.body, "warning");
+                        Blacknet.clearPassWordDialog();
                     }
-                    Blacknet.clearPassWordDialog();
+                    
                 });
             })
     };
@@ -546,6 +540,7 @@ void function () {
 
         await Blacknet.balance();
         await Blacknet.network();
+        await Blacknet.initContacts();
 
         if (currentAccount) {
             await Blacknet.initRecentTransactions();

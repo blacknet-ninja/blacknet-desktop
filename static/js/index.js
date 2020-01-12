@@ -279,29 +279,36 @@ $(document).ready(function () {
         window.isGenerated = !this.checked;
     }
 
-    async function addPeer() {
-        let address = $('#ip_address').val(), port = $('#ip_port').val();
+    async function newContact() {
+        let node = $('.contacts-dialog'), name = node.find('.name').val(), 
+            account = node.find('.account').val();
 
-        if(!Blacknet.verifyNetworkAddress(address)) {
-            Blacknet.message("Invalid address", "warning")
-            $('#ip_address').focus()
+        if(name.length == 0) {
+            Blacknet.message("Invalid Name", "warning")
+            node.find('.name').focus()
             return 
         }
-        if(!Blacknet.verifyNetworkPort(port)) {
-            Blacknet.message("Invalid port", "warning")
-            $('#ip_port').focus()
+        if(!Blacknet.verifyAccount(account)) {
+            Blacknet.message("Invalid Account", "warning")
+            node.find('.account').focus()
             return
         }
 
-        let result = await Blacknet.getPromise(`/addpeer/${address}/${port}/true`);
-        if(result == 'true') result = "Connected";
-
-        await Blacknet.network();
-
-        Blacknet.message(`${address} ${result}`, "success")
-
-        $('#ip_address').val('');
+        Blacknet.newContact(name, account);
     }
+
+    async function selectContact(){
+        let account = $(this).find('.c_account').text();
+        $('#transfer_to').val(account);
+        console.log(account)
+        $('.mask, .dialog.contacts-dialog').hide();
+    }
+
+    function showAddressBook(){
+        $('.mask, .dialog.contacts-dialog').show();
+    }
+
+    
 
     async function disconnect(){
 
@@ -355,7 +362,9 @@ $(document).ready(function () {
         .on("click", ".cancel_lease_btn", transfer_click('cancel_lease'))
         .on("click", "#sign", sign)
         .on("click", "#verify", verify)
-        .on("click", "#add_peer_btn", addPeer)
+        .on('click', '.address-book', showAddressBook)
+        .on("click", "#contact-list tr", selectContact)
+        .on("click", "#new_contact_btn", newContact)
         .on("click", "#switch_account", switchAccount)
         .on("click", "#new_account", Blacknet.generate)
         .on("input", "#confirm_mnemonic_warning", confirm_mnemonic_warning)

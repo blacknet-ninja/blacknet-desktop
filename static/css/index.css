@@ -11,6 +11,7 @@
     margin: 0;
     padding: 0;
     font-family: "Titillium Web", Arial, sans-serif;
+    box-sizing: content-box;
 }
 
 :root {
@@ -435,6 +436,9 @@ td.message p{
     padding: 15px 20px;
     overflow: hidden;
 }
+.send .form{
+    width: 740px;
+}
 
 .dialog.send {
     display: none;
@@ -491,10 +495,43 @@ input:focus, button:focus {
     padding: 2px 5px;
 }
 
+.send-text{
+    position: relative;
+}
+.send-text .address-book{
+    position: absolute;
+    right: 20px;
+    font-size: 24px;
+}
+
+.contacts-dialog.dialog{
+    width: 710px;
+    margin-left: -375px;
+    display: none;
+    height: auto;
+    margin-top: 0;
+    top: 100px;
+}
+#contact-table{
+    width: 100%;
+    min-width: 0;
+    margin-bottom: 30px;
+}
+#contact-table thead tr td{
+    text-align: left;
+}
+#contact-table tbody tr{
+    cursor: pointer;
+}
+#contact-table tbody tr:hover td{
+    color: #F75535;
+}
+
 .dialog.confirm .body{
     /* text-align: center; */
     line-height: 25px;
     font-size: 14px;
+    word-break: break-all;
 }
 
 .dialog.confirm .btns{
@@ -532,9 +569,9 @@ input:focus, button:focus {
 
 .dialog.account {
     text-align: center;
-    width: 600px;
+    width: 800px;
     height: 360px;
-    margin: -200px 0 0 -320px;
+    margin: -200px 0 0 -400px;
     border: none;
     border-radius: none;
 }

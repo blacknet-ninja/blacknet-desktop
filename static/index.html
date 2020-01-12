@@ -219,9 +219,10 @@
                 <div class="send">
                     <div class="form">
                         <legend data-i18n="send bln">Send BLN</legend>
-                        <div class="field-row">
+                        <div class="field-row send-text">
                             <label data-i18n="pay to">Pay To</label>
                             <input type="text" id="transfer_to" placeholder="Blacknet account...">
+                            <a href="#" class="address-book"><i class="fa fa-address-book"></i></a>
                         </div>
 
                         <div class="field-row">
@@ -492,6 +493,32 @@
             <div class="btns">
                 <button id="generate_new_account" data-i18n="confirm">Confirm</button>
                 <button id="generate_new_account" data-i18n="cancel" class="cancel">Cancel</button>
+            </div>
+        </div>
+        <div class="dialog contacts-dialog">
+            <div class="header"></div>
+            <div class="body">
+                <h3 data-i18n="contacts">Contacts</h3>
+                <table id="contact-table">
+                    <thead>
+                        <tr>
+                            <td data-i18n="Account">Account</td>
+                            <td data-i18n="Name">Name</td>
+                        </tr>
+                    </thead>
+                    <tbody id="contact-list"></tbody>
+                </table>
+                <div class="form" class="add-peer">
+                    <div class="field-row">
+                        <label data-i18n="Name">Name</label>
+                        <input type="text" class="name" value=''>
+                    </div>
+                    <div class="field-row">
+                        <label data-i18n="Account">Account</label>
+                        <input type="text" class="account" value="">
+                    </div>
+                    <button id="new_contact_btn" data-i18n="Add">New Contact</button>
+                </div>
             </div>
         </div>
         <div class="dialog password">

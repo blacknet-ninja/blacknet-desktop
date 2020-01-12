@@ -9,12 +9,14 @@ PACKAGE_VERSION=$(cat package.json \
 echo "Start release $PACKAGE_VERSION"
 
 declare -a arr=("dmg" "exe" "deb" "rpm" "freebsd")
+description=''
 
 for name in "${arr[@]}"
 do
   sha256=`shasum -a 256 dist/blacknet-desktop-${PACKAGE_VERSION}.${name}`
   response=`curl --request POST  --silent --header "Private-Token: ${gitlab_private_token}" --form "file=@dist/blacknet-desktop-${PACKAGE_VERSION}.${name}" "https://gitlab.COM/api/v4/projects/blacknet-ninja%2Fblacknet-desktop/uploads"`
-  echo $response | jq -r '.markdown'
-  echo "$name: ${sha256:1:64}\n\n"
-
+  markdown=`echo $response | jq -r '.markdown'`
+  description+="${markdown} \n${name}: ${sha256:1:64}\n\n"
 done
+
+echo $description

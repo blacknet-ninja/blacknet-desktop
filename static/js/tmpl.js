@@ -113,30 +113,13 @@ Blacknet.template = {
         $(tmpl).appendTo("#leases-list");
     },
 
-    peer: function (peer, index) {
-        let direction;
-        if (peer.outgoing)
-            direction = "Outgoing";
-        else
-            direction = "Incoming";
-
+    contact: function (contact, index) {
         let tmpl =
             `<tr>
-                <td>${index + 1}</td>
-                <td class="right">${peer.remoteAddress}</td>
-                <td>${peer.agent}</td>
-                <td class="right">${peer.ping} ms</td>
-                <td class="narrow">${peer.timeOffset} s</td>
-                <td class="narrow">${peer.banScore}</td>
-                <td class="narrow">${direction}</td>
-                <td class="narrow">${(peer.totalBytesRead/1048576).toFixed(2)} MiB</td>
-                <td class="narrow">${(peer.totalBytesWritten/1048576).toFixed(2)} MiB</td>
-                <td class="disconnect" data-peerid="${peer.peerId}">
-                    <a href="#">Disconnect</a>
-                </td>
+                <td class="c_account">${contact.account}</td>
+                <td class="c_name">${contact.name}</td>
             </tr>`;
-
-        $(tmpl).appendTo("#peer-list");
+        $(tmpl).appendTo(".contacts-dialog #contact-list");
     },
 
     block: async function (blockListEl, block, height, prepend = true) {
