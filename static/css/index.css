@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2019 Blacknet Team
+ * Copyright (c) 2018-2020 Blacknet Team
  *
  * Licensed under the Jelurida Public License version 1.1
  * for the Blacknet Public Blockchain Platform (the "License");
@@ -11,6 +11,7 @@
     margin: 0;
     padding: 0;
     font-family: "Titillium Web", Arial, sans-serif;
+    box-sizing: content-box;
 }
 
 :root {
@@ -435,6 +436,9 @@ td.message p{
     padding: 15px 20px;
     overflow: hidden;
 }
+.send .form{
+    width: 740px;
+}
 
 .dialog.send {
     display: none;
@@ -491,10 +495,43 @@ input:focus, button:focus {
     padding: 2px 5px;
 }
 
+.send-text{
+    position: relative;
+}
+.send-text .address-book{
+    position: absolute;
+    right: 20px;
+    font-size: 24px;
+}
+
+.contacts-dialog.dialog{
+    width: 710px;
+    margin-left: -375px;
+    display: none;
+    height: auto;
+    margin-top: 0;
+    top: 100px;
+}
+#contact-table{
+    width: 100%;
+    min-width: 0;
+    margin-bottom: 30px;
+}
+#contact-table thead tr td{
+    text-align: left;
+}
+#contact-table tbody tr{
+    cursor: pointer;
+}
+#contact-table tbody tr:hover td{
+    color: #F75535;
+}
+
 .dialog.confirm .body{
     /* text-align: center; */
     line-height: 25px;
     font-size: 14px;
+    word-break: break-all;
 }
 
 .dialog.confirm .btns{
@@ -532,9 +569,9 @@ input:focus, button:focus {
 
 .dialog.account {
     text-align: center;
-    width: 600px;
+    width: 800px;
     height: 360px;
-    margin: -200px 0 0 -320px;
+    margin: -200px 0 0 -400px;
     border: none;
     border-radius: none;
 }
@@ -655,7 +692,7 @@ a, a:active {
     transition: width .6s ease;
 }
 
-.about{
+.rightpanel .about{
     padding-left: 180px;
     background: url("../images/logo.png") no-repeat;
     padding-bottom: 100px;
@@ -664,7 +701,7 @@ p{
     line-height: 1.8;
 }
 
-.about p{
+.rightpanel .about p{
     margin-bottom: 30px;
     line-height: 1.8;
 }
@@ -740,4 +777,216 @@ tr.undis{
 
 #peer-table{
     margin-bottom: 20px;
+}
+ul,li{
+    list-style: none;;
+}
+.encrypted_chat *, .encrypted_chat *:before, .encrypted_chat *:after {
+  box-sizing: border-box;
+}
+
+.encrypted_chat {
+  background: var(--lighter-grey-bg);
+  font: 14px/20px "Lato", Arial, sans-serif;
+  padding: 40px 0;
+  color: white;
+}
+.encrypted_chat .container {
+
+    width: 750px;
+  background: #444753;
+  border-radius: 5px;
+}
+.encrypted_chat .people-list {
+  width: 260px;
+  float: left;
+}
+.encrypted_chat .people-list .search {
+  padding: 20px;
+}
+.encrypted_chat .people-list input {
+  border-radius: 3px;
+  border: none;
+  padding: 14px;
+  color: white;
+  background: #6A6C75;
+  width: 90%;
+  font-size: 14px;
+}
+.encrypted_chat .people-list .fa-search {
+  position: relative;
+  left: -25px;
+}
+.encrypted_chat .people-list ul {
+  height: 570px;
+  padding-top: 20px;
+}
+.encrypted_chat .people-list ul li {
+  padding-bottom: 20px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.encrypted_chat .people-list ul li.active{
+    background: #F2F5F8;
+}
+
+.encrypted_chat .people-list ul li.active .name{
+    color: var(--gold-text);
+}
+.qrcode{
+    background:#3B3B3B;width: 100px;height: 100px
+}
+
+.encrypted_chat .people-list img {
+  float: left;
+}
+.encrypted_chat .people-list .chatabout {
+  float: left;
+  margin-top: 8px;
+}
+.encrypted_chat .people-list .chatabout {
+  padding-left: 8px;
+}
+.encrypted_chat .people-list .status {
+  color: #92959E;
+}
+.encrypted_chat .chat {
+  width: 490px;
+  float: left;
+  background: #F2F5F8;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  color: #434651;
+}
+.encrypted_chat .chat .chat-header {
+  padding: 20px;
+  border-bottom: 2px solid white;
+}
+.encrypted_chat .chat .chat-header img {
+  float: left;
+}
+.encrypted_chat .chat .chat-header .chat-about {
+  float: left;
+  padding-left: 10px;
+  margin-top: 6px;
+}
+.encrypted_chat .chat .chat-header .chat-with {
+  font-weight: bold;
+  font-size: 16px;
+}
+.encrypted_chat .chat .chat-header .chat-num-messages {
+  color: #92959E;
+}
+.encrypted_chat .chat .chat-header .fa-star {
+  float: right;
+  color: #D8DADF;
+  font-size: 20px;
+  margin-top: 12px;
+}
+.encrypted_chat .chat .chat-history {
+  padding: 30px 30px 20px;
+  border-bottom: 2px solid white;
+  overflow-y: scroll;
+  height: 575px;
+}
+.encrypted_chat .chat .chat-history .message-data {
+  margin-bottom: 15px;
+}
+.encrypted_chat .chat .chat-history .message-data-time {
+  color: #a8aab1;
+  padding-left: 6px;
+}
+.encrypted_chat .chat .chat-history .message {
+  color: white;
+  padding: 18px 20px;
+  line-height: 26px;
+  font-size: 16px;
+  border-radius: 7px;
+  margin-bottom: 30px;
+  width: 90%;
+  position: relative;
+}
+.encrypted_chat .chat .chat-history .message:after {
+  bottom: 100%;
+  left: 7%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+  border-bottom-color: #86BB71;
+  border-width: 10px;
+  margin-left: -10px;
+}
+.encrypted_chat .chat .chat-history .my-message {
+  background: #86BB71;
+}
+.encrypted_chat .chat .chat-history .other-message {
+  background: #94C2ED;
+}
+.encrypted_chat .chat .chat-history .other-message:after {
+  border-bottom-color: #94C2ED;
+  left: 93%;
+}
+.encrypted_chat .chat .chat-message {
+  padding: 30px;
+}
+.encrypted_chat .chat .chat-message textarea {
+  width: 100%;
+  border: none;
+  padding: 10px 20px;
+  font: 14px/22px "Lato", Arial, sans-serif;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  resize: none;
+}
+.encrypted_chat .chat .chat-message .fa-file-o, .encrypted_chat .chat .chat-message .fa-file-image-o {
+  font-size: 16px;
+  color: gray;
+  cursor: pointer;
+}
+.encrypted_chat .chat .chat-message button {
+  float: right;
+  color: #94C2ED;
+  font-size: 16px;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  background: #F2F5F8;
+}
+.encrypted_chat .chat .chat-message button:hover {
+  color: #75b1e8;
+}
+.encrypted_chat .online, .encrypted_chat .offline, .encrypted_chat .me {
+  margin-right: 3px;
+  font-size: 10px;
+}
+.encrypted_chat .online {
+  color: #86BB71;
+}
+.encrypted_chat .offline {
+  color: #E38968;
+}
+.encrypted_chat .me {
+  color: #94C2ED;
+}
+.encrypted_chat .align-left {
+  text-align: left;
+}
+.encrypted_chat .align-right {
+  text-align: right;
+}
+.encrypted_chat .float-right {
+  float: right;
+}
+.encrypted_chat .clearfix:after {
+  visibility: hidden;
+  display: block;
+  font-size: 0;
+  content: " ";
+  clear: both;
+  height: 0;
 }

@@ -4,3 +4,4 @@ blacknet-*
 package-lock.json
 .DS_Store
 
+quick-build-and-upload-gitlab.sh

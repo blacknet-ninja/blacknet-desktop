@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2019 Blacknet Team
+ * Copyright (c) 2018-2020 Blacknet Team
  *
  * Licensed under the Jelurida Public License version 1.1
  * for the Blacknet Public Blockchain Platform (the "License");
@@ -18,7 +18,7 @@ Blacknet.template = {
         let dataType = tx.type;
         let txData = tx.data;
 
-        let amount = txData.amount, tmpl, txfee, type, status, txaccount = tx.from;
+        let amount = txData.amount, tmpl, txfee, type, txaccount = tx.from;
 
         type = Blacknet.getTxTypeName(tx, dataType);
         txfee = Blacknet.getFormatBalance(tx.fee);
@@ -29,13 +29,6 @@ Blacknet.template = {
         if (dataType == 0 && tx.from == account) {
             txaccount = txData.to;
         }
-
-        if (tx.time * 1000 < Date.now() - 1000 * 10) {
-            status = 'Confirmed';
-        } else {
-            status = await Blacknet.getStatusText(tx.height, tx.hash);
-        }
-
         let txText = type, linkText = '';
 
 
@@ -120,30 +113,13 @@ Blacknet.template = {
         $(tmpl).appendTo("#leases-list");
     },
 
-    peer: function (peer, index) {
-        let direction;
-        if (peer.outgoing)
-            direction = "Outgoing";
-        else
-            direction = "Incoming";
-
+    contact: function (contact, index) {
         let tmpl =
             `<tr>
-                <td>${index + 1}</td>
-                <td class="right">${peer.remoteAddress}</td>
-                <td>${peer.agent}</td>
-                <td class="right">${peer.ping} ms</td>
-                <td class="narrow">${peer.timeOffset} s</td>
-                <td class="narrow">${peer.banScore}</td>
-                <td class="narrow">${direction}</td>
-                <td class="narrow">${(peer.totalBytesRead/1048576).toFixed(2)} MiB</td>
-                <td class="narrow">${(peer.totalBytesWritten/1048576).toFixed(2)} MiB</td>
-                <td class="disconnect" data-peerid="${peer.peerId}">
-                    <a href="#">Disconnect</a>
-                </td>
+                <td class="c_account">${contact.account}</td>
+                <td class="c_name">${contact.name}</td>
             </tr>`;
-
-        $(tmpl).appendTo("#peer-list");
+        $(tmpl).appendTo(".contacts-dialog #contact-list");
     },
 
     block: async function (blockListEl, block, height, prepend = true) {
