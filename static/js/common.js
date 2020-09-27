@@ -51,7 +51,6 @@ void function () {
         Blacknet.explorer = JSON.parse(localStorage.explorer);
     }
 
-    currentAccount = blacknetjs.Address(mnemonic);
     Blacknet.init = async function (nowait) {
 
         if(!nowait) await Blacknet.wait(1000);
