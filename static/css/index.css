@@ -10,7 +10,7 @@
  * {
     margin: 0;
     padding: 0;
-    font-family: "Titillium Web", Arial, sans-serif;
+    font-family: "Monospaced","Titillium Web", Arial, sans-serif;
     box-sizing: content-box;
 }
 
@@ -38,9 +38,15 @@ header {
     z-index: 98;
 }
 .account-input a{
-    font-size: 14px;
+    font-size: 12px;
 }
-.account_text{
+.account h2{
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+.account-input .account_text{
+    width: 440px;
     text-align: center;
 }
 
@@ -51,7 +57,7 @@ header {
     overflow: hidden;
     line-height: 64px;
     color: var(--gold-text);
-    font-size: 32px;
+    font-size: 20px;
     font-weight: bold;
     white-space: nowrap;
     text-decoration: none;
@@ -72,7 +78,7 @@ header .network {
     margin-right: 16px;
     /* color: var(--gold-text);; */
     line-height: 32px;
-    font-size: 14px;
+    font-size: 12px;
 }
 .network p{
     line-height: 32px;
@@ -83,11 +89,11 @@ header .network {
 }
 
 .main-menu {
-    width: 220px;
+    width: 180px;
     float: left;
     overflow: hidden;
     color: var(--grey-text);
-    font-size: 14px;
+    font-size: 12px;
     background: linear-gradient(left right, #3d3d3d, #222);
 }
 
@@ -130,7 +136,7 @@ header .network {
     padding: 10px 20px;
     position: absolute;
     color: var(--grey-text);
-    left: 220px;
+    left: 180px;
     right: 0;
     bottom: 0;
     top: 64px;
@@ -141,7 +147,8 @@ header .network {
 }
 .rightpanel::-webkit-scrollbar {
     background-color:transparent;
-    width:16px
+    width:5px;
+    border-radius: 1px;
 }
 
 .rightpanel::-webkit-scrollbar-track {
@@ -161,14 +168,14 @@ header .network {
 
 .rightpanel .info {
     word-break: break-all;
-    font-size: 14px;
+    font-size: 12px;
 }
 
 .rightpanel .info h3 {
     color: var(--gold-text);
     margin: 10px 0 5px;
     padding: 5px 0;
-    font-size: 14px;
+    font-size: 12px;
     border-bottom: 1px solid #ADADAD;
 }
 
@@ -205,7 +212,7 @@ header .network {
 
 legend {
     color: var(--grey-text);
-    font-size: 14px;
+    font-size: 12px;
     background: var(--darker-grey-bg);
     padding: 10px 10px;
     overflow: hidden;
@@ -215,7 +222,7 @@ legend {
 label {
     color: var(--grey-text);
     flex-basis: 120px;
-    font-size: 14px;
+    font-size: 12px;
     flex-grow: 1;
     max-width: 120px;
 }
@@ -227,13 +234,13 @@ label strong {
 
 input[type="text"], input[type="password"], input[type="number"], select {
     border: 1px solid var(--darker-grey-bg);
-    border-radius: 4px;
+    /* border-radius: 4px; */
     height: 20px;
     width: 80%;
     padding: 5px 10px;
     background-color: var(--grey-text);
     flex-grow: 8;
-    font-size: 14px;
+    font-size: 12px;
 }
 
 select{
@@ -253,26 +260,20 @@ button {
     white-space: nowrap;
     text-align: center;
     background-image: none;
-    border: 1px solid transparent;
-    -webkit-box-shadow: 0 2px 0 rgba(231, 162, 14, 0.02);
-    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.015);
     cursor: pointer;
-    -webkit-transition: all .3s cubic-bezier(.645, .045, .355, 1);
-    transition: all .3s cubic-bezier(.645, .045, .355, 1);
+    color: #eee;
+    background-color: #3CA2A2;
+    width: 60px;
+    border: 1px solid #3CA2A2;
+    font-size: 12px;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
     -ms-touch-action: manipulation;
     touch-action: manipulation;
-    height: 32px;
+    height: 24px;
     padding: 0 15px;
-    font-size: 14px;
-    border-radius: 4px;
-    color: rgba(0, 0, 0, 0.65);
-    background-color: #ddd;
-    border-color: #d9d9d9;
-    -webkit-writing-mode: horizontal-tb !important;
 }
 
 .form button, .staking button{
@@ -286,31 +287,37 @@ button {
     margin-left: 12px;
 }
 .newaccount button{
-    color: var(--gold-text);
-    background-color: var(--darker-grey-bg);
-    width: 100px;
+    
     float: right;
-    border: 1px solid var(--gold-text);
+}
+.fake-window{
+    height: 32px;
+    -webkit-app-region: drag;
+    z-index: 10000;
+    position: fixed;
+    top: 0;
+    width: 100%;
 }
 button.v2{
-    color: var(--gold-text);
-    background-color: var(--darker-grey-bg);
-    width: 100px;
-    border: 1px solid var(--gold-text);
+    color: #eee;
+    background-color: #3CA2A2;
+    width: 60px;
+    border: 1px solid #3CA2A2;
+    font-size: 12px;
 }
 
 input:read-only {
     background-color: var(--lighter-grey-bg);
     color: var(--gold-text);
     border: none;
-    font-size: 14px;
+    font-size: 12px;
 }
 
 input:-moz-read-only {
     background-color: var(--lighter-grey-bg);
     color: var(--gold-text);
     border: none;
-    font-size: 14px;
+    font-size: 12px;
 }
 
 /* input:focus {
@@ -332,8 +339,14 @@ thead td{
     color: var(--grey-text);
     padding: 10px;
     text-align: center;
-    font-size: 14px;
+    font-size: 12px;
     background-color: var(--darker-grey-bg);
+}
+table td.typee{
+    font-size: 10px;
+}
+table td a.address{
+    font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;
 }
 
 
@@ -341,11 +354,14 @@ tbody td, tfoot td {
     color: var(--grey-text);
     padding: 5px 10px;
     word-wrap: break-word;
-    font-size: 14px;
+    font-size: 12px;
     border-bottom: 1px solid #5B5B5B;
     height: 24px;
     line-height: 24px;
     vertical-align: top;
+}
+tbody tr:last-child, tfoot tr:last-child{
+    border-bottom: none;
 }
 
 .tx-foot tr{
@@ -354,6 +370,8 @@ tbody td, tfoot td {
 
 #tx-table{
     margin-top: 0;
+    margin-bottom: 50px;
+    width: 880px;
 }
 
 .filter a{
@@ -361,7 +379,7 @@ tbody td, tfoot td {
     line-height: 32px;
     display: inline-block;
     margin-top: 20px;
-    font-size: 14px;
+    font-size: 12px;
 }
 .filter a.active{
     background: #2D2D2D;
@@ -430,7 +448,7 @@ td.message p{
     background: #2A2A2A;
     z-index: 101;
     color: #999EA3;
-    border: 1px solid #1D1D1D;
+    border: 1px solid #333;
     border-radius: 3px;
     font-size: 12px;
     padding: 15px 20px;
@@ -453,7 +471,7 @@ td.message p{
 }
 
 .dialog p {
-    font-size: 14px;
+    font-size: 12px;
     word-break: break-all;
     line-height: 1.5;
 }
@@ -530,7 +548,7 @@ input:focus, button:focus {
 .dialog.confirm .body{
     /* text-align: center; */
     line-height: 25px;
-    font-size: 14px;
+    font-size: 12px;
     word-break: break-all;
 }
 
@@ -571,17 +589,19 @@ input:focus, button:focus {
     text-align: center;
     width: 800px;
     height: 360px;
-    margin: -200px 0 0 -400px;
+    margin: -200px 0 0 -420px;
     border: none;
     border-radius: none;
 }
 .dialog.newaccount{
     display: none;
     width: 700px;
-    height: 260px;
-    margin: -130px 0 0 -350px;
+    height: 230px;
+    margin: -145px 0 0 -370px;
 }
-
+h1{
+    font-size: 18px;
+}
 .dialog.account h1 {
     color: var(--gold-text);
 }
@@ -752,7 +772,7 @@ tr.undis{
     background: var(--gold-text);
     margin-bottom: 16px;
     padding: 8px 10px;
-    font-size: 14px;
+    font-size: 12px;
     border-radius: 3px;
     color: var(--darker-grey-bg);
     text-align: center;
@@ -787,7 +807,7 @@ ul,li{
 
 .encrypted_chat {
   background: var(--lighter-grey-bg);
-  font: 14px/20px "Lato", Arial, sans-serif;
+  font: 12px/20px "Lato", Arial, sans-serif;
   padding: 40px 0;
   color: white;
 }
@@ -807,11 +827,11 @@ ul,li{
 .encrypted_chat .people-list input {
   border-radius: 3px;
   border: none;
-  padding: 14px;
+  padding: 12px;
   color: white;
   background: #6A6C75;
   width: 90%;
-  font-size: 14px;
+  font-size: 12px;
 }
 .encrypted_chat .people-list .fa-search {
   position: relative;
@@ -937,7 +957,7 @@ ul,li{
   width: 100%;
   border: none;
   padding: 10px 20px;
-  font: 14px/22px "Lato", Arial, sans-serif;
+  font: 12px/22px "Lato", Arial, sans-serif;
   margin-bottom: 10px;
   border-radius: 5px;
   resize: none;

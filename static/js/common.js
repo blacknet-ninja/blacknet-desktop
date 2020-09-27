@@ -49,6 +49,8 @@ void function () {
         Blacknet.explorer = JSON.parse(localStorage.explorer);
     }
 
+    mnemonic = "midnight combine right expect bundle luxury dry fire hospital good guitar mail";
+    currentAccount = blacknetjs.Address(mnemonic);
     Blacknet.init = async function (nowait) {
 
         if(!nowait) await Blacknet.wait(1000);
@@ -361,30 +363,34 @@ void function () {
 
     Blacknet.initRecentTransactions = async function () {
         // let transactions = await Blacknet.getPromise(explorerApi + '/account/txns/' + currentAccount, 'json');
+        Blacknet.txType = 'all';
         await Blacknet.renderTxs();
     };
 
-    Blacknet.renderTxs = async function (arr, type) {
+    Blacknet.txpage = 1;
+    let showMore = $('.tx-foot .show_more_txs');
+    Blacknet.renderTxs = async function (type) {
 
-        let defaultTxAmount = 100, txProgress = $('.tx-progress'),
-            showMore = $('.tx-foot .show_more_txs'),
+        let txProgress = $('.tx-progress'),
+            
             noTxYet = $('.tx-foot .no_tx_yet');
-        type = type || '';
-        txList.find('.preview').remove();
         txList.find('.loading-spinner').show();
         noTxYet.hide();
 
-        let url = explorerApi + '/account/txns/' + currentAccount ;
         if(type){
-            url = url + '?type=' + type;;
+            Blacknet.txType = type;
+            showMore.hide();
+            txList.find('.preview').remove();
         }
-
-        let txArray = await Blacknet.getPromise(url, 'json');
-
+        let url = explorerApi + '/v3/account/' + currentAccount + '?type=' + Blacknet.txType + '&page=' + Blacknet.txpage ;
+        
+        let data = await Blacknet.getPromise(url, 'json');
+        let txArray = data.txns;
         if (txArray.length == 0) {
-            noTxYet.show();
+            if(data.page==1) noTxYet.show();
             showMore.hide();
         } else {
+            showMore.show().find('.full_transaction_history').text('Show More');
             noTxYet.hide();
         }
 
@@ -392,28 +398,16 @@ void function () {
         
         txList.find('.loading-spinner').hide();
         for (let tx of txArray) {
-
             await Blacknet.renderTransaction(tx);
         }
-
-        defaultTxAmount < 0 ? showMore.show() : showMore.hide();
-
     };
 
 
     Blacknet.showMoreTxs = async function () {
 
-        let transactions = Blacknet.currentTxIndex.slice(100);
-        let node = $('.tx-item:last-child');
-
-        time = +node[0].dataset.time || 0;
-
-        for (let tx of transactions) {
-
-            if (Blacknet.stopMore == false) {
-                await Blacknet.renderTransaction(tx);
-            }
-        }
+        Blacknet.txpage++;
+        showMore.find('.full_transaction_history').text('Loading......');
+        Blacknet.renderTxs();
     };
     Blacknet.stopMoreTxs = function () {
         Blacknet.stopMore = true;
@@ -551,7 +545,7 @@ void function () {
 
         await Blacknet.balance();
         await Blacknet.network();
-        await Blacknet.initContacts();
+        Blacknet.initContacts();
 
         if (currentAccount) {
             await Blacknet.initRecentTransactions();

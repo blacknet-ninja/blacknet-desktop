@@ -322,17 +322,11 @@ $(document).ready(function () {
     async function renderTx(){
 
         let type = this.dataset.type;
+        Blacknet.txpage = 1;
         
-        Blacknet.stopMoreTxs = true;
         $(this).addClass('active').siblings().removeClass('active');
 
-        if(type == 'all'){
-            await Blacknet.renderTxs(Blacknet.txIndex);
-        }else{
-            await Blacknet.renderTxs(Blacknet.txIndex, type);
-        }
-        Blacknet.stopMoreTxs = false;
-
+        await Blacknet.renderTxs(type);
     }
 
     function explorerSave(){
@@ -373,7 +367,6 @@ $(document).ready(function () {
         .on("click", ".filter a", renderTx)
         .on('click', '#explorer_save', explorerSave)
         .on("click", ".tx-foot .show_more_txs", function(){
-            $(this).hide();
             Blacknet.stopMore = false;
             Blacknet.showMoreTxs();
             return false;

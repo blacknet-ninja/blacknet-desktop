@@ -38,8 +38,10 @@ Blacknet.template = {
         }
 
         if(dataType == 2 || dataType == 3){
+            // txText = `<a target="_blank" href="${Blacknet.explorer.tx + tx.txid.toLowerCase()}">
+            // ${type} ${account == tx.from ? "to" : 'from'}</a>`;
             txText = `<a target="_blank" href="${Blacknet.explorer.tx + tx.txid.toLowerCase()}">
-            ${type} ${account == tx.from ? "to" : 'from'}</a>`;
+            ${type}</a>`;
         }
 
         if(dataType != 254 && dataType != 0 && dataType != 2 && dataType != 3){
@@ -49,18 +51,18 @@ Blacknet.template = {
         if(dataType == 0 || dataType == 2 || dataType == 3){
 
             if(account == tx.from){
-                linkText = `<a target="_blank" href="${Blacknet.explorer.account + txData.to}">${txData.to}</a>`;
+                linkText = `<a target="_blank" class="address" href="${Blacknet.explorer.account + txData.to}">${txData.to}</a>`;
             }else{
-                linkText = `<a target="_blank" href="${Blacknet.explorer.account + tx.from}">${tx.from}</a>`;
+                linkText = `<a target="_blank" class="address" href="${Blacknet.explorer.account + tx.from}">${tx.from}</a>`;
             }
         }
 
         if(dataType != 0 && dataType != 2 && dataType != 3){
 
             if(tx.from != 'genesis'){
-                linkText = `<a target="_blank" href="${Blacknet.explorer.account + tx.from}">${tx.from}</a>`;
+                linkText = `<a target="_blank" class="address" href="${Blacknet.explorer.account + tx.from}">${tx.from}</a>`;
             }else{
-                linkText = `<a target="_blank" href="${Blacknet.explorer.account + tx.to}">${tx.to}</a>`;
+                linkText = `<a target="_blank" class="address" href="${Blacknet.explorer.account + tx.to}">${tx.to}</a>`;
             }
         }
         amount = Blacknet.getFormatBalance(amount);
@@ -68,7 +70,7 @@ Blacknet.template = {
         tmpl =
             `<tr class="preview txhash${tx.hash} tx-item" data-time="${tx.time}" data-hash="${tx.hash}"  data-height="${tx.height}">
                 <td class="narrow">${Blacknet.unix_to_local_time(tx.time)}</td>
-                <td class="narrow">${txText}</td>
+                <td class="narrow typee">${txText}</td>
                 <td class="left">${linkText}</td>
                 <td class="right"><span class="strong">${amount}</span></td>
             </tr>`;

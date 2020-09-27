@@ -35,12 +35,13 @@ function openWindow(url) {
 
     mainWindow = new BrowserWindow({
         title: 'Blacknet',
-        width: 1340,
-        height: 800,
+        width: 1120,
+        height: 650,
         backgroundColor: "#2D2D2D",
         webPreferences: {
             nodeIntegration: true
-        }
+        },
+        frame: false 
     });
 
     mainWindow.loadFile('./static/index.html');
