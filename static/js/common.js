@@ -14,7 +14,7 @@ void function () {
     window.BigNumber = require('./js/bignumber.min.js');
     window.QRious = require('./js/qrious.js');
 
-    const inf = new Intl.NumberFormat();
+    const inf = new Intl.NumberFormat('zh-CN',{maximumFractionDigits: 8});
     const ipc = require('electron').ipcRenderer;
 
     const Blacknet = {};
@@ -27,6 +27,7 @@ void function () {
     const explorerApi = "https://blnscan.io/api";
 
     const bln = new blacknetjs();
+    // let mnemonic ='rebel result cake economy very stay find acoustic sausage analyst ridge aspect', currentAccount = 'blacknet126avvjlevw9xqnmlgscytxtuf57ndwzmz569vcaatceevhcjxjfq29ywqc';
     let mnemonic, currentAccount;
 
     Blacknet.appversion = window.require('electron').remote.app.getVersion();
@@ -37,7 +38,7 @@ void function () {
             alert(`${data.version} has been released, please update your wallet.`);
         }
     });
-    ipc.send('start_listen');
+    // ipc.send('start_listen');
     // for test
 
     Blacknet.explorer = {
@@ -286,7 +287,9 @@ void function () {
                             $('#transfer_result').text(res.body).parent().removeClass("hidden");
                             Blacknet.clearPassWordDialog();
                         }
+                        Blacknet.balance();
                         if(callback) callback();
+
                     }else{
                         Blacknet.message(res.body, "warning");
                         Blacknet.clearPassWordDialog();
@@ -350,7 +353,14 @@ void function () {
 
     Blacknet.unix_to_local_time = function (unix_timestamp) {
 
-        let date = new Date(unix_timestamp * 1000);
+        let date;
+        if((unix_timestamp + "").length == 10){
+
+            date = new Date(unix_timestamp * 1000);
+        }else{
+            date = new Date(unix_timestamp);s
+        }
+        
         let hours = "0" + date.getHours();
         let minutes = "0" + date.getMinutes();
         let seconds = "0" + date.getSeconds();
@@ -387,8 +397,8 @@ void function () {
         
         let data = await Blacknet.getPromise(url, 'json');
         let txArray = data.txns;
-        if (txArray.length == 0) {
-            if(data.page==1) noTxYet.show();
+        if (txArray.length == 0 || txArray.length < 100) {
+            if(data.page==1 && txArray.length == 0) noTxYet.show();
             showMore.hide();
         } else {
             showMore.show().find('.full_transaction_history').text('Show More');
@@ -544,8 +554,8 @@ void function () {
         }
         Blacknet.initExplorer();
 
-        await Blacknet.balance();
-        await Blacknet.network();
+        Blacknet.balance();
+        Blacknet.network();
         Blacknet.initContacts();
 
         if (currentAccount) {
@@ -673,8 +683,19 @@ void function () {
         }
     });
 
+    const shell = require('electron').shell;
+
+    // assuming $ is jQuery
+    $(document).on('click', 'a[href^="http"]', function(event) {
+        event.preventDefault();
+        shell.openExternal(this.href);
+    });
+
 
     Blacknet.init();
 
+    $(document).on('click', '.close', function(){
+        ipc.send('close-app');
+    });
     window.Blacknet = Blacknet;
 }();

@@ -28,6 +28,9 @@ app.on('ready', () => {
 
     });
 
+    ipcMain.on('close-app', (event, arg) => {
+        app.quit();
+    });
 });
 
 
@@ -36,7 +39,7 @@ function openWindow(url) {
     mainWindow = new BrowserWindow({
         title: 'Blacknet',
         width: 1120,
-        height: 650,
+        height: 630,
         backgroundColor: "#2D2D2D",
         webPreferences: {
             nodeIntegration: true

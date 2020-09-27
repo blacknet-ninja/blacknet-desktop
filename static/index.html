@@ -23,13 +23,16 @@
 
 <body>
     <div class="fake-window">
-
+        
+    </div>
+    <div class="close">
+        <i class="fa fa-times"></i>
     </div>
     <div class="blacknet-message" id="blacknet-message">
     </div>
     <header>
         <div class="logo">
-            Blacknet
+            <p class="overview_balance">0.00000000 BLN</p>
         </div>
         <div class="network">
             <p>
@@ -38,10 +41,13 @@
                 <span data-i18n="connections">Connections</span>: <span class="connections strong">-</span></p>
         </div>
     </header>
+
+
     <div class="container">
         <div class="main-menu">
 
             <div class="menu">
+
                 <ul>
                     <li>
                         <a href="#" data-index="overview" data-i18n="overview">Overview</a>
@@ -76,13 +82,8 @@
                                 <td>
                                     <span class="overview_account"></span>
                                     <a href="#" id="switch_account" data-i18n="Logout">Logout</a>
-
                                 </td>
-                                <td rowspan="4">
-                                    <div class="qrcode">
-                                        <canvas id="qr"></canvas>
-                                    </div>
-                                </td>
+                                
                             </tr>
                             <tr>
                                 <td data-i18n="balance">Balance</td>
@@ -200,8 +201,7 @@
                             </tr>
                             <tr class="show_more_txs">
                                 <td colspan="5" class="text-center">
-                                    <a href="#" class="full_transaction_history"
-                                        data-i18n="Show More">Show More</a>
+                                    <a href="#" class="full_transaction_history" data-i18n="Show More">Show More</a>
                                 </td>
                             </tr>
                         </tfoot>
@@ -390,7 +390,8 @@
 
                 <div class="about">
                     <p>
-                        Blacknet Desktop Version <span class='desktop_version strong'></span>.<br /> Copyright © 2018-2020
+                        Blacknet Desktop Version <span class='desktop_version strong'></span>.<br /> Copyright ©
+                        2018-2020
                         Blacknet Team.<br />
                         <span data-i18n="This software uses experimental cryptography.">This software uses experimental
                             cryptography.</span><br />
@@ -401,7 +402,7 @@
                         <span data-i18n="For licensing information see">For licensing information see</span> <a
                             href="LICENSE.txt" target="_blank">LICENSE</a> and <a href="3RD-PARTY-LICENSES.txt"
                             target="_blank">3RD-PARTY-LICENSES</a>.
-                        
+
                     </p>
                 </div>
                 <div class="lease">
@@ -469,143 +470,145 @@
             </div>
             <!-- End container div -->
         </div>
+    </div>
 
-        <div class="mask init"></div>
-        <div class="dialog send">
-            <div class="header"></div>
-            <div class="body">
-                <br>
-                <p data-i18n="are you sure you want to send?">Are you sure you want to send?</p>
-                <br>
-                <br>
-                <p>1000.00000000 BLN to</p>
-                <p>blacknet1p6net7gqy907ga6skdasf63ewz08ez83puhmlyquj0sdy0f0xyvslc4j3u</p>
-                <br>
-                <br>
-                <p data-i18n="bln added as transaction fee?">BLN added as transaction fee?</p>
-            </div>
-            <div class="btns">
-                <button id="generate_new_account" data-i18n="confirm">Confirm</button>
-                <button id="generate_new_account" data-i18n="cancel" class="cancel">Cancel</button>
-            </div>
+    <div class="mask init"></div>
+    <div class="dialog send">
+        <div class="header"></div>
+        <div class="body">
+            <br>
+            <p data-i18n="are you sure you want to send?">Are you sure you want to send?</p>
+            <br>
+            <br>
+            <p>1000.00000000 BLN to</p>
+            <p>blacknet1p6net7gqy907ga6skdasf63ewz08ez83puhmlyquj0sdy0f0xyvslc4j3u</p>
+            <br>
+            <br>
+            <p data-i18n="bln added as transaction fee?">BLN added as transaction fee?</p>
         </div>
-        <div class="dialog contacts-dialog">
-            <div class="header"></div>
-            <div class="body">
-                <h3 data-i18n="contacts">Contacts</h3>
-                <table id="contact-table">
-                    <thead>
-                        <tr>
-                            <td data-i18n="Account">Account</td>
-                            <td data-i18n="Name">Name</td>
-                        </tr>
-                    </thead>
-                    <tbody id="contact-list"></tbody>
-                </table>
-                <div class="form" class="add-peer">
-                    <div class="field-row">
-                        <label data-i18n="Name">Name</label>
-                        <input type="text" class="name" value=''>
-                    </div>
-                    <div class="field-row">
-                        <label data-i18n="Account">Account</label>
-                        <input type="text" class="account" value="">
-                    </div>
-                    <button id="new_contact_btn" data-i18n="Add">New Contact</button>
+        <div class="btns">
+            <button id="generate_new_account" data-i18n="confirm">Confirm</button>
+            <button id="generate_new_account" data-i18n="cancel" class="cancel">Cancel</button>
+        </div>
+    </div>
+    <div class="dialog contacts-dialog">
+        <div class="header"></div>
+        <div class="body">
+            <h3 data-i18n="contacts">Contacts</h3>
+            <table id="contact-table">
+                <thead>
+                    <tr>
+                        <td data-i18n="Account">Account</td>
+                        <td data-i18n="Name">Name</td>
+                    </tr>
+                </thead>
+                <tbody id="contact-list"></tbody>
+            </table>
+            <div class="form" class="add-peer">
+                <div class="field-row">
+                    <label data-i18n="Name">Name</label>
+                    <input type="text" class="name" value=''>
                 </div>
-            </div>
-        </div>
-        <div class="dialog password">
-            <div class="header"></div>
-            <div class="body">
-                <p>
-                    <span data-i18n="this operation needs your mnemonic.">This operation needs your Mnemonic.</span></p>
-                <br>
-                <p data-i18n="enter your mnemonic:">Enter Your Mnemonic:</p>
-                <input type="password" class='mnemonic'>
-            </div>
-            <div class="btns">
-                <button class="confirm v2" data-i18n="confirm">Confirm</button>
-            </div>
-        </div>
-        <div class="dialog confirm">
-            <div class="header"></div>
-            <div class="body">
-                <p>
-                    confirm
-                </p>
-            </div>
-            <div class="btns">
-                <button class="cancel v2" data-i18n="cancel">Cancel</button>
-                <button class="confirm v2" data-i18n="confirm">Confirm</button>
-            </div>
-        </div>
-        <div class="dialog account">
-            <div class="header"></div>
-            <div class="body"></div>
-            <div class="body">
-                <img src="images/logo.png" height="160" width="160" alt="">
-                <h2>Blacknet Wallet</h2>
-                <div class="spinner">
-                    <div class="rect1"></div>
-                    <div class="rect2"></div>
-                    <div class="rect3"></div>
-                    <div class="rect4"></div>
-                    <div class="rect5"></div>
+                <div class="field-row">
+                    <label data-i18n="Account">Account</label>
+                    <input type="text" class="account" value="">
                 </div>
-                <p class="account-input">
-                    <input type="password" class='account_text' placeholder="Input your mnemonic">
-                </p>
-            </div>
-            <div class="account-input">
-                <button class="enter v2" data-i18n="enter">Enter</button><br>
-                <br>
-                <a href="#" id="new_account" data-i18n="create account"> Create Account</a>
+                <button id="new_contact_btn" data-i18n="Add">New Contact</button>
             </div>
         </div>
-        <div class="dialog newaccount">
-            <div class="header"></div>
-            <div class="body"></div>
-            <div class="body">
-                <h1>Your automatically generated Mnemonic is:</h1>
-                <div class="form">
+    </div>
+    <div class="dialog password">
+        <div class="header"></div>
+        <div class="body">
+            <p>
+                <span data-i18n="this operation needs your mnemonic.">This operation needs your Mnemonic.</span></p>
+            <br>
+            <p data-i18n="enter your mnemonic:">Enter Your Mnemonic:</p>
+            <input type="password" class='mnemonic'>
+        </div>
+        <div class="btns">
+            <button class="confirm v2" data-i18n="confirm">Confirm</button>
+        </div>
+    </div>
+    <div class="dialog confirm">
+        <div class="header"></div>
+        <div class="body">
+            <p>
+                confirm
+            </p>
+        </div>
+        <div class="btns">
+            <button class="cancel v2" data-i18n="cancel">Cancel</button>
+            <button class="confirm v2" data-i18n="confirm">Confirm</button>
+        </div>
+    </div>
+    <div class="dialog account">
+        <div class="header"></div>
+        <div class="body"></div>
+        <div class="body">
+            <img src="images/logo.png" height="160" width="160" alt="">
+            <h2>Blacknet Wallet</h2>
+            <div class="spinner">
+                <div class="rect1"></div>
+                <div class="rect2"></div>
+                <div class="rect3"></div>
+                <div class="rect4"></div>
+                <div class="rect5"></div>
+            </div>
+            <p class="account-input">
+                <input type="password" class='account_text' placeholder="Input your mnemonic">
+            </p>
+        </div>
+        <div class="account-input">
+            <button class="enter v2" data-i18n="enter">Enter</button><br>
+            <br>
+            <a href="#" id="new_account" data-i18n="create account"> Create Account</a>
+        </div>
+    </div>
+    <div class="dialog newaccount">
+        <div class="header"></div>
+        <div class="body"></div>
+        <div class="body">
+            <h1>Your automatically generated Mnemonic is:</h1>
+            <div class="form">
 
-                    <div class="field-row">
-                        <label data-i18n="mnemonic">Mnemonic</label>
-                        <input type="text" id="new_mnemonic" readonly>
-                    </div>
-                    <div class="field-row">
-                        <label data-i18n="account">Account</label>
-                        <input type="text" id="new_account_text" readonly>
-                    </div>
-
+                <div class="field-row">
+                    <label data-i18n="mnemonic">Mnemonic</label>
+                    <input type="text" id="new_mnemonic" readonly>
                 </div>
-                <div id="confirm_mnemonic_warning_container">
-                    <input type="checkbox" id="confirm_mnemonic_warning" value="0">
-                    <span></span>
-                    <label for="confirm_mnemonic_warning" data-i18n="promise of save mnemonic">I will not forget my
-                        mnemonic and I will never disclose it</label>
+                <div class="field-row">
+                    <label data-i18n="account">Account</label>
+                    <input type="text" id="new_account_text" readonly>
                 </div>
-                <button id="new_account_next_step" data-i18n="next">NEXT</button>
-            </div>
 
-        </div>
-        <div class="progress-stats">
-            <div class="progress">
-                <div class="progress-bar" role="progressbar"></div>
             </div>
+            <div id="confirm_mnemonic_warning_container">
+                <input type="checkbox" id="confirm_mnemonic_warning" value="0">
+                <span></span>
+                <label for="confirm_mnemonic_warning" data-i18n="promise of save mnemonic">I will not forget my
+                    mnemonic and I will never disclose it</label>
+            </div>
+            <button id="new_account_next_step" data-i18n="next">NEXT</button>
         </div>
-        <div class="progress-stats-text"></div>
 
-        <div class="notification tx">
-            <p>Incoming Transaction</p>
-            <p>Date: <span class="time"></span></p>
-            <p>Amount: <span class="amount"></span> Type: <span class="type"></span></p>
+    </div>
+    <div class="progress-stats">
+        <div class="progress">
+            <div class="progress-bar" role="progressbar"></div>
         </div>
-        <footer></footer>
-        <script type="text/javascript" src="js/common.js"></script>
-        <script type="text/javascript" src="js/tmpl.js"></script>
-        <script type="text/javascript" src="js/i18n.js"></script>
-        <script type="text/javascript" src="js/index.js"></script>
+    </div>
+    <div class="progress-stats-text"></div>
+
+    <div class="notification tx">
+        <p>Incoming Transaction</p>
+        <p>Date: <span class="time"></span></p>
+        <p>Amount: <span class="amount"></span> Type: <span class="type"></span></p>
+    </div>
+    <footer></footer>
+    <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript" src="js/tmpl.js"></script>
+    <script type="text/javascript" src="js/i18n.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
 </body>
+
 </html>

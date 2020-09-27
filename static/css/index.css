@@ -21,13 +21,21 @@
     --gold-text: #E8BA3F;
     --grey-text: #ADADAD;
 }
+html, body{
+    height: 100%;
+    position: relative;
+}
 
 body {
     background: var(--darker-grey-bg);
 }
 
+.wrap{
+    position: absolute;
+    top: 64px;
+    left: 180px;
+}
 .container{
-    
     overflow: hidden;
 }
 header {
@@ -66,18 +74,21 @@ header {
     background-size: 40px 40px;
     background-position: 30px 50%;
 }
+.logo p{
+    line-height: 64px;;
+}
 
 header .network {
     float: right;
     height: 32px;
-    margin-top: 16px;
+    margin-top: 28px;
     background: var(--lighter-grey-bg);
     color: #fff;
     padding: 0 5px;
     border-radius: 3px;
-    margin-right: 16px;
+    margin-right: 5px;
     /* color: var(--gold-text);; */
-    line-height: 32px;
+    line-height: 24px;
     font-size: 12px;
 }
 .network p{
@@ -88,13 +99,23 @@ header .network {
     color: var(--gold-text);
 }
 
-.main-menu {
+.menu {
     width: 180px;
-    float: left;
-    overflow: hidden;
     color: var(--grey-text);
     font-size: 12px;
-    background: linear-gradient(left right, #3d3d3d, #222);
+    position: absolute;
+    top: 64px;
+    left: 0;
+    bottom: 0;
+    margin-top: 1px;
+}
+h3{
+    margin-top: 10px;
+}
+.menu .balance p{
+    color: var(--gold-text);
+    text-align: center;
+    padding: 10px 0;
 }
 
 .menu li {
@@ -142,7 +163,6 @@ header .network {
     top: 64px;
     background: var(--lighter-grey-bg);
     margin-top: 1px;
-    /* border-left: 1px solid var(--lighter-grey-border); */
     overflow-y: scroll;
 }
 .rightpanel::-webkit-scrollbar {
@@ -293,10 +313,25 @@ button {
 .fake-window{
     height: 32px;
     -webkit-app-region: drag;
-    z-index: 10000;
-    position: fixed;
+    z-index: 1000;
+    position: absolute;
     top: 0;
     width: 100%;
+}
+.close{
+    position: absolute;
+    right: 5px;
+    top: 4px;
+    cursor: pointer;
+    overflow: hidden;
+    z-index: 10022;
+}
+.close i{
+    
+    color: grey;
+    
+    font-size: 18px;
+    
 }
 button.v2{
     color: #eee;
@@ -324,8 +359,8 @@ input:-moz-read-only {
 box-shadow: inset 0 0 4px #000000;
 } */
 
-.overview table {
-    margin-bottom: 25px;
+.overview {
+   padding-bottom: 25px;
 }
 
 table {
