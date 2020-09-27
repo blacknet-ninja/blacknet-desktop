@@ -13,7 +13,9 @@ void function () {
     window.$ = window.jQuery = require('./js/jquery-3.4.1.min.js');
     window.BigNumber = require('./js/bignumber.min.js');
     window.QRious = require('./js/qrious.js');
-    const ipc = require('electron').ipcRenderer
+
+    const inf = new Intl.NumberFormat();
+    const ipc = require('electron').ipcRenderer;
 
     const Blacknet = {};
     const DEFAULT_CONFIRMATIONS = 10;
@@ -49,7 +51,6 @@ void function () {
         Blacknet.explorer = JSON.parse(localStorage.explorer);
     }
 
-    mnemonic = "midnight combine right expect bundle luxury dry fire hospital good guitar mail";
     currentAccount = blacknetjs.Address(mnemonic);
     Blacknet.init = async function (nowait) {
 
@@ -140,7 +141,7 @@ void function () {
     };
 
     Blacknet.toBLNString = function (number) {
-        return new BigNumber(number).dividedBy(1e8).toFixed(8) + ' BLN';
+        return inf.format(new BigNumber(number).dividedBy(1e8).toFixed(8)) + ' BLN';
     };
 
 
@@ -151,9 +152,10 @@ void function () {
         let ledger = Blacknet.ledger, nodeinfo = Blacknet.nodeinfo;
 
         network.find('.height').html(ledger.height);
-        network.find('.supply').html(new BigNumber(ledger.supply).dividedBy(1e8).toFixed(0));
+        network.find('.supply').html(inf.format(new BigNumber(ledger.supply).dividedBy(1e8).toFixed(0)));
         network.find('.connections').text(nodeinfo.outgoing + nodeinfo.incoming);
-        $('.overview_version').text(Blacknet.appversion);
+        $('.desktop_version').text(Blacknet.appversion);
+        $('.overview_version').text(nodeinfo.agent);
 
         if (nodeinfo.warnings.length > 0) {
             warnings.text(nodeinfo.warnings);
@@ -498,7 +500,7 @@ void function () {
 
     Blacknet.getFormatBalance = function (balance) {
 
-        return new BigNumber(balance).dividedBy(1e8).toFixed(8) + ' BLN';
+        return inf.format(new BigNumber(balance).dividedBy(1e8).toFixed(8)) + ' BLN';
     };
 
 
