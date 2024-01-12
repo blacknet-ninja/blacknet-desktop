@@ -10,12 +10,16 @@
       "url": "https://gitlab.com/blacknet1fcemzzxna"
    },
    "devDependencies": {
-      "electron": "^7.1.8"
+      "electron": "^7.1.8",
+      "electron-builder": "^24.9.1"
    },
    "scripts": {
       "start": "electron .",
       "pack": "electron-builder --dir",
-      "dist": "electron-builder -mwl --dir"
+      "dist": "electron-builder -mwl",
+      "dist-l": "electron-builder -l",
+      "dist-w": "electron-builder -w",
+      "dist-m": "electron-builder -m"
    },
    "dependencies": {
       "blacknetjs": "^1.1.2",
