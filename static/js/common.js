@@ -19,12 +19,12 @@ void function () {
 
     const Blacknet = {};
     const DEFAULT_CONFIRMATIONS = 10;
-    const apiVersion = "https://blnmobiledaemon.blnscan.io/api/v2", body = $("body");;
+    const apiVersion = "https://blnexplorer.io/api/v2", body = $("body");;
     const dialogPassword = $('.dialog.password'), dialogConfirm = $('.dialog.confirm'), mask = $('.mask');
     
     const dialogAccount = $('.dialog.account');
     const txList = $('#tx-list');
-    const explorerApi = "https://blnscan.io/api";
+    const explorerApi = "https://blnexplorer.io/api";
 
     const bln = new blacknetjs();
     // let mnemonic ='rebel result cake economy very stay find acoustic sausage analyst ridge aspect', currentAccount = 'blacknet126avvjlevw9xqnmlgscytxtuf57ndwzmz569vcaatceevhcjxjfq29ywqc';
@@ -42,10 +42,10 @@ void function () {
     // for test
 
     Blacknet.explorer = {
-        block: 'https://blnscan.io/',
-        blockHeight: 'https://blnscan.io/',
-        tx: 'https://blnscan.io/',
-        account: 'https://blnscan.io/'
+        block: 'https://blnexplorer.io/',
+        blockHeight: 'https://blnexplorer.io/',
+        tx: 'https://blnexplorer.io/',
+        account: 'https://blnexplorer.io/'
     };
 
     if (localStorage.explorer) {
