@@ -1,0 +1,35 @@
+on:
+  push:
+    tags:
+      - '**'
+jobs:
+  build-on-lin:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - run: yarnpkg install
+      - run: yarnpkg run dist-l
+  build-on-win:
+    runs-on: windows-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - run: yarn install
+      - run: yarn run dist-w
+  build-on-mac:
+    runs-on: macos-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - run: yarn install
+      - run: yarn run dist-m
